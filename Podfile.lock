@@ -1,0 +1,95 @@
+PODS:
+  - Alamofire (5.10.2)
+  - Differentiator (5.0.0)
+  - Moya/Core (15.0.0):
+    - Alamofire (~> 5.0)
+  - Moya/RxSwift (15.0.0):
+    - Moya/Core
+    - RxSwift (~> 6.0)
+  - Pageboy (4.2.0)
+  - ReactorKit (3.2.0):
+    - RxSwift (~> 6.0)
+    - WeakMapTable (~> 1.1)
+  - Reusable (4.1.2):
+    - Reusable/Storyboard (= 4.1.2)
+    - Reusable/View (= 4.1.2)
+  - Reusable/Storyboard (4.1.2)
+  - Reusable/View (4.1.2)
+  - RxCocoa (6.9.0):
+    - RxRelay (= 6.9.0)
+    - RxSwift (= 6.9.0)
+  - RxDataSources (5.0.0):
+    - Differentiator (~> 5.0)
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - RxGesture (4.0.4):
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - RxKeyboard (2.0.0):
+    - RxCocoa (~> 6.0)
+    - RxSwift (~> 6.0)
+  - RxRelay (6.9.0):
+    - RxSwift (= 6.9.0)
+  - RxSwift (6.9.0)
+  - SnapKit (5.7.1)
+  - Starscream (4.0.8)
+  - Tabman (3.2.0):
+    - Pageboy (~> 4.2.0)
+  - Then (3.0.0)
+  - WeakMapTable (1.2.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - Moya/RxSwift
+  - ReactorKit
+  - Reusable
+  - RxDataSources
+  - RxGesture
+  - RxKeyboard (= 2.0.0)
+  - SnapKit
+  - Starscream
+  - Tabman
+  - Then
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Differentiator
+    - Moya
+    - Pageboy
+    - ReactorKit
+    - Reusable
+    - RxCocoa
+    - RxDataSources
+    - RxGesture
+    - RxKeyboard
+    - RxRelay
+    - RxSwift
+    - SnapKit
+    - Starscream
+    - Tabman
+    - Then
+    - WeakMapTable
+
+SPEC CHECKSUMS:
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
+  Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
+  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
+  Pageboy: 7f7886f61c76633df635861bf7839caf2cabdb3e
+  ReactorKit: e8b11d6b9c415405f381669b095c154a05b59eca
+  Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
+  RxCocoa: ac16414696ae706516be3e1ab00fcce5bdc9be8a
+  RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
+  RxGesture: f3efb47ed2d26a8082f7b660d4a59970e275a7f8
+  RxKeyboard: 4f5863f43b4ff0cbb2a20b94688d6b80c8a43c14
+  RxRelay: 6b0c930e5cef57d5fe2032571e5e65b78e3cbdb1
+  RxSwift: 31649ace6aceeb422e16ff71c60804f9c3281ed9
+  SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  Starscream: 19b5533ddb925208db698f0ac508a100b884a1b9
+  Tabman: 49f9181a2bfe5c29d002864dac2de8e0b7ea9180
+  Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
+  WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
+
+PODFILE CHECKSUM: 0daad34453f470519dc62500c7c4c05747696dd6
+
+COCOAPODS: 1.16.2

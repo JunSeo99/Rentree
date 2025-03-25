@@ -6,7 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		048C030D683010CE89A7CA42 /* Pods_Rentree.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDCF0E41A8C636B72E0D2133 /* Pods_Rentree.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		3953B4E9799142420A114993 /* Pods-Rentree.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rentree.release.xcconfig"; path = "Target Support Files/Pods-Rentree/Pods-Rentree.release.xcconfig"; sourceTree = "<group>"; };
+		BA44822F1F49815CAA3125DB /* Pods-Rentree.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rentree.debug.xcconfig"; path = "Target Support Files/Pods-Rentree/Pods-Rentree.debug.xcconfig"; sourceTree = "<group>"; };
+		BDCF0E41A8C636B72E0D2133 /* Pods_Rentree.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Rentree.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCE195B2D92D304002BFE5D /* Rentree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rentree.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -36,17 +43,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				048C030D683010CE89A7CA42 /* Pods_Rentree.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6231E9DFD081D30BD440CFC0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BDCF0E41A8C636B72E0D2133 /* Pods_Rentree.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B37FCE37753597F5CADCE9FC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BA44822F1F49815CAA3125DB /* Pods-Rentree.debug.xcconfig */,
+				3953B4E9799142420A114993 /* Pods-Rentree.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		BFCE19522D92D304002BFE5D = {
 			isa = PBXGroup;
 			children = (
 				BFCE195D2D92D304002BFE5D /* Rentree */,
 				BFCE195C2D92D304002BFE5D /* Products */,
+				B37FCE37753597F5CADCE9FC /* Pods */,
+				6231E9DFD081D30BD440CFC0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -65,9 +93,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BFCE196E2D92D305002BFE5D /* Build configuration list for PBXNativeTarget "Rentree" */;
 			buildPhases = (
+				9430414D6A75A9264A0B9CB7 /* [CP] Check Pods Manifest.lock */,
 				BFCE19572D92D304002BFE5D /* Sources */,
 				BFCE19582D92D304002BFE5D /* Frameworks */,
 				BFCE19592D92D304002BFE5D /* Resources */,
+				56A92372AC07606979768AD8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -77,8 +107,6 @@
 				BFCE195D2D92D304002BFE5D /* Rentree */,
 			);
 			name = Rentree;
-			packageProductDependencies = (
-			);
 			productName = Rentree;
 			productReference = BFCE195B2D92D304002BFE5D /* Rentree.app */;
 			productType = "com.apple.product-type.application";
@@ -127,6 +155,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		56A92372AC07606979768AD8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Rentree/Pods-Rentree-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Rentree/Pods-Rentree-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Rentree/Pods-Rentree-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9430414D6A75A9264A0B9CB7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Rentree-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		BFCE19572D92D304002BFE5D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -140,6 +210,7 @@
 /* Begin XCBuildConfiguration section */
 		BFCE196F2D92D305002BFE5D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA44822F1F49815CAA3125DB /* Pods-Rentree.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -168,6 +239,7 @@
 		};
 		BFCE19702D92D305002BFE5D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3953B4E9799142420A114993 /* Pods-Rentree.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
