@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "Defualt_Event.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

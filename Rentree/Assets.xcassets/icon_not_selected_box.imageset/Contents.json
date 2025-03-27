@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "icon_not_selected_box.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

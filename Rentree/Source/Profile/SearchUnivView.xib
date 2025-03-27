@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchUnivView" customModule="Rentree" customModuleProvider="target">
+            <connections>
+                <outlet property="dismissButton" destination="xJu-qf-5M3" id="Vtr-L9-vW1"/>
+                <outlet property="tableView" destination="a5Z-d9-Lj0" id="ViC-TA-pKb"/>
+                <outlet property="textField" destination="P1S-NR-Oev" id="8I0-Zn-YTW"/>
+                <outlet property="view" destination="n5y-wc-E3n" id="ReP-G8-isT"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="n5y-wc-E3n">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="학교를 입력해주세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P1S-NR-Oev">
+                    <rect key="frame" x="78.666666666666657" y="136" width="292.33333333333337" height="25"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AHw-UZ-Tpf">
+                    <rect key="frame" x="22" y="166" width="349" height="2"/>
+                    <color key="backgroundColor" name="jiuItem6"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="2" id="xUh-Fn-Ogw"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="755" verticalCompressionResistancePriority="1000" text="학교" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xL9-4H-J5i">
+                    <rect key="frame" x="22" y="138" width="31.666666666666671" height="21"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                    <color key="textColor" name="jiuFont4"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="a5Z-d9-Lj0">
+                    <rect key="frame" x="23" y="178" width="347" height="640"/>
+                    <color key="backgroundColor" name="jiuDefualt"/>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0b1-0T-RnI">
+                    <rect key="frame" x="0.0" y="59" width="393" height="43"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xJu-qf-5M3">
+                            <rect key="frame" x="10" y="0.0" width="43" height="43"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="43" id="3qZ-0J-Zor"/>
+                                <constraint firstAttribute="height" constant="43" id="HmC-Zk-LSJ"/>
+                            </constraints>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" image="Icon_Cancel"/>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="43" id="Jdx-0f-sCz"/>
+                        <constraint firstAttribute="bottom" secondItem="xJu-qf-5M3" secondAttribute="bottom" id="TtP-kD-CfZ"/>
+                        <constraint firstItem="xJu-qf-5M3" firstAttribute="leading" secondItem="0b1-0T-RnI" secondAttribute="leading" constant="10" id="eCl-Re-5FF"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="jZ4-2j-qCe"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="0b1-0T-RnI" firstAttribute="top" secondItem="jZ4-2j-qCe" secondAttribute="top" id="3G4-U9-FU6"/>
+                <constraint firstItem="a5Z-d9-Lj0" firstAttribute="leading" secondItem="jZ4-2j-qCe" secondAttribute="leading" constant="23" id="42D-Ra-N9J"/>
+                <constraint firstItem="0b1-0T-RnI" firstAttribute="leading" secondItem="jZ4-2j-qCe" secondAttribute="leading" id="5HB-R0-ol6"/>
+                <constraint firstAttribute="trailing" secondItem="AHw-UZ-Tpf" secondAttribute="trailing" constant="22" id="7XS-Ps-ae3"/>
+                <constraint firstItem="0b1-0T-RnI" firstAttribute="trailing" secondItem="jZ4-2j-qCe" secondAttribute="trailing" id="8C3-kz-NZg"/>
+                <constraint firstItem="P1S-NR-Oev" firstAttribute="top" secondItem="jZ4-2j-qCe" secondAttribute="top" constant="77" id="8E2-Vb-Atn"/>
+                <constraint firstItem="xL9-4H-J5i" firstAttribute="centerY" secondItem="P1S-NR-Oev" secondAttribute="centerY" id="8xG-T0-2h9"/>
+                <constraint firstItem="xL9-4H-J5i" firstAttribute="leading" secondItem="jZ4-2j-qCe" secondAttribute="leading" constant="22" id="DyN-q5-Lih"/>
+                <constraint firstItem="jZ4-2j-qCe" firstAttribute="trailing" secondItem="a5Z-d9-Lj0" secondAttribute="trailing" constant="23" id="RFl-hV-H57"/>
+                <constraint firstItem="a5Z-d9-Lj0" firstAttribute="top" secondItem="AHw-UZ-Tpf" secondAttribute="bottom" constant="10" id="Un7-r8-tRm"/>
+                <constraint firstItem="P1S-NR-Oev" firstAttribute="leading" secondItem="xL9-4H-J5i" secondAttribute="trailing" constant="25" id="abu-H2-LI7"/>
+                <constraint firstItem="jZ4-2j-qCe" firstAttribute="trailing" secondItem="P1S-NR-Oev" secondAttribute="trailing" constant="22" id="cwl-mF-PE6"/>
+                <constraint firstItem="AHw-UZ-Tpf" firstAttribute="top" secondItem="P1S-NR-Oev" secondAttribute="bottom" constant="5" id="f2o-YW-f5X"/>
+                <constraint firstItem="a5Z-d9-Lj0" firstAttribute="bottom" secondItem="jZ4-2j-qCe" secondAttribute="bottom" id="mCv-hE-BhB"/>
+                <constraint firstItem="AHw-UZ-Tpf" firstAttribute="leading" secondItem="n5y-wc-E3n" secondAttribute="leading" constant="22" id="y6S-pq-2NP"/>
+            </constraints>
+            <point key="canvasLocation" x="-605.3435114503817" y="-115.49295774647888"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Icon_Cancel" width="43" height="43"/>
+        <namedColor name="jiuDefualt">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="jiuFont4">
+            <color red="0.49803921568627452" green="0.49803921568627452" blue="0.49803921568627452" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="jiuItem6">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.77647058823529413" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
