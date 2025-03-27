@@ -7,7 +7,7 @@
 import UIKit
 var isOpenModal: Bool = false
 class MainTabBarController: UITabBarController {
-    
+    let socketManager = SocketManager()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,8 +37,12 @@ class MainTabBarController: UITabBarController {
         navi1.tabBarItem = .init(title: "내역", image: .iconList.resize(newWidth: 34), tag: 1)
         navi1.title = "내역"
         
-        let vc2 = UIViewController()
-        let navi2 = MainNavigationViewController(rootViewController: vc2)
+        
+       
+        
+        let chatView = chattingStoryboard.instantiateViewController(withIdentifier: "RoomListView") as! RoomListView
+        chatView.reactor = .init(provider: .init(), initialState: .init(), socketManager: socketManager)
+        let navi2 = MainNavigationViewController(rootViewController: chatView)
         navi2.tabBarItem = .init(title: "채팅", image: .chat.resize(newWidth: 34), tag: 2)
         navi2.title = "채팅"
         

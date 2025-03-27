@@ -72,3 +72,12 @@ public extension Reactive where Base: UIViewController {
     }
     
 }
+extension UIViewController{
+    func setTapEndEditing(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap2(_:)))
+        self.view.addGestureRecognizer(tap)
+    }
+    @objc func handleTap2(_ sender: UITapGestureRecognizer? = nil) {
+        self.view.endEditing(true)
+    }
+}

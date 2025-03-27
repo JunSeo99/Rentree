@@ -14,21 +14,17 @@ class Post: Codable {
     var createdAt: String
     var title: String
     var content: String
-    var schoolCode: String
+    var schoolCode: String // 대학교 이름 '단국대학교'
     var photos: [String]
     var likes: [String]
     var tags: [String]
     var geoInfo: GeoInfo
-    var price: Int
-    var availableDates: [Int]
+    var price: Int // Price Type 당 얼마
+    var priceType: String // 3일
+    var availableDates: [Int] // 잉여 데이터
     var borrowerInfo: [BorrowerInfo]
-    var rentalType: String
-    var itemType: String
-//
-//    enum CodingKeys: String, CodingKey {
-//        case id = "id" // 이미 toString 처리됨
-//        case writerId, createdAt, title, content, schoolCode, photos, likes, tags, geoInfo, price, availableDates, borrowerInfo, rentalType, itemType
-//    }
+    var rentalType: String // ex)
+    var itemType: String // 테블릿 or 전동 드라이버
     
     static func sampleData() -> [Post] {
         return [
@@ -46,12 +42,8 @@ struct GeoInfo: Codable {
 // BorrowerInfo 모델
 struct BorrowerInfo: Codable {
     var userId: String
-    var state: Int
+    var state: Int // 0 아무도 안빌림, 1 빌려달라고 요청이 옴, 2 빌려주는중
     var createdAt: String
-    var startDate: String
-    var endDate: String
-
-//    enum CodingKeys: String, CodingKey {
-//        case userId, state, createdAt, startDate, endDate
-//    }
+    var startDate: String // 빌려주기 시작한 일자 yyyyMMdd
+    var endDate: String // 반납을 해야하는 일자 yyyyMMdd
 }

@@ -11,11 +11,9 @@ struct User: Codable {
     let id: String
     let name: String
     var schoolCode: String
-    
     var age: Int
     var geoInfo: GeoJsonPoint
     var mannerValue: Int
-    
     var profileImage: String?
 }
 
