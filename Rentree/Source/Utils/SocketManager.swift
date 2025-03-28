@@ -8,7 +8,7 @@ import Starscream
 import RxCocoa
 import RxSwift
 import Network
-let socketURL:String = "ws://ec2-13-209-238-93.ap-northeast-2.compute.amazonaws.com:8080/v1/message"
+let socketURL:String = "ws://localhost:8080/v1/message"
 //let socketURL: String = "ws://192.168.1.22:8080/v1/message"
 class SocketManager: WebSocketDelegate{
     deinit {

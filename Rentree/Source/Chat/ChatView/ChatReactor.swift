@@ -92,8 +92,6 @@ class ChatReactor: Reactor {
         
         case scrollToBottomClicked
         
-//        case hrBlock
-//        case hrReport
         
         case mention(chatId: String?)
         case mentionClicked(messageId: String)

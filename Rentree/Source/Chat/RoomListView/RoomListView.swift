@@ -55,10 +55,12 @@ class RoomListView: UIViewController, StoryboardView {
                     }
                     self.navigationController?.navigationController?.popViewController(animated: true)
                 }
-                let storyboard = UIStoryboard(name: "ChatMain", bundle: nil)
-                guard let chatView = storyboard.instantiateViewController(withIdentifier: "ChatView") as? ChatView else {return}
+                
+                
+                let chatView = ChatView(nibName: "ChatView", bundle: nil)
                 chatView.reactor = chatReactor
                 self.navigationController?.navigationController?.pushViewController(chatView, animated: true)
+                
                 chatView.rx.viewWillDisappear
                     .map({ _ in Reactor.Action.unreadCountToZero(roomId: chatReactor.currentState.roomId) })
                     .bind(to: reactor.action)
@@ -72,19 +74,6 @@ class RoomListView: UIViewController, StoryboardView {
                     .disposed(by: chatView.disposeBag)
                 
                 
-                if (chatReactor.initialState.room as? Room)?.isBlock == true{
-                    chatView.rx.viewDidAppear
-                        .take(1)
-                        .subscribe(onNext: { _ in
-                            chatReactor.action.onNext(.initAlert(.hrUserOut))
-                        }).disposed(by: chatView.disposeBag)
-                }
-                if user?.userType == "manager" {
-                    chatView.navigationItem.title = "지원자 채팅"
-                }
-                else{
-                    chatView.navigationItem.title = "사장님 채팅"
-                }
             }).disposed(by: disposeBag)
         
         tableView.rx.modelSelected(Room.self)
@@ -146,10 +135,8 @@ extension RoomListView: UITableViewDelegate {
 class RoomListReactor: Reactor {
     var initialState: State = State()
     var socketManager: SocketManager
-    var userType: String
     var chatProvider: MoyaProvider<ChatAPI>
-    init(chatProvider: MoyaProvider<ChatAPI>, socketManager: SocketManager,userType: String) {
-        self.userType = userType // "alba", "manager"
+    init(chatProvider: MoyaProvider<ChatAPI>, socketManager: SocketManager) {
         self.chatProvider = chatProvider
         self.socketManager = socketManager
     }
@@ -195,7 +182,7 @@ class RoomListReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action{
         case .refresh:
-            return chatProvider.rx.request(.getRooms(userId: user!.id, userType: userType))
+            return chatProvider.rx.request(.getRoomList(userId: user.id))
                 .map([Room].self)
                 .debug()
                 .asObservable()
@@ -253,20 +240,17 @@ class RoomListReactor: Reactor {
                             }
                             if chat.type == "chat" || chat.type == "image" {
                                 var removed = currentRooms.remove(at: roomIndex)
-                                removed.lastMessage = .init(content: chat.content,date: chat.createdAt, messageId: chat.id, containMention: (chat.mention?.userId == user!.id) || removed.lastMessage.containMention)
-                                if chat.userId != user!.id{
+                                removed.lastMessage = .init(content: chat.content,date: chat.createdAt, messageId: chat.id, containMention: (chat.mention?.userId == user.id) || removed.lastMessage.containMention)
+                                if chat.userId != user.id{
                                     removed.unreadCount += 1
                                 }
                                 currentRooms.insert(removed, at: 0)
                             }
                             else if chat.type == "withdrawal" {
-                                if chat.userId == user!.id{
+                                if chat.userId == user.id{
                                     currentRooms.removeAll(where: {
                                         return $0.id == chat.roomId
                                     })
-                                }
-                                else{
-                                    currentRooms[roomIndex].partnerOut = true
                                 }
                             }
                             return .concat([

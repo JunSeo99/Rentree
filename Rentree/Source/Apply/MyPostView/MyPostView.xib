@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyPostView" customModule="Rentree" customModuleProvider="target">
+            <connections>
+                <outlet property="tableView" destination="VBb-oe-Vla" id="hae-sw-t3K"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zzN-q1-fNG">
+                    <rect key="frame" x="0.0" y="817" width="393" height="1"/>
+                    <color key="backgroundColor" name="jiuItem3"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="eAc-b8-YQg"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jOf-fE-y6Y">
+                    <rect key="frame" x="0.0" y="59" width="393" height="1"/>
+                    <color key="backgroundColor" name="jiuItem3"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="vbR-vW-yC8"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="VBb-oe-Vla">
+                    <rect key="frame" x="0.0" y="60" width="393" height="757"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="jOf-fE-y6Y" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="AUr-5z-KE8"/>
+                <constraint firstAttribute="trailing" secondItem="zzN-q1-fNG" secondAttribute="trailing" id="Bm8-rP-BgL"/>
+                <constraint firstItem="VBb-oe-Vla" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="FTW-9I-Rk9"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="zzN-q1-fNG" secondAttribute="bottom" id="Gum-ab-uBc"/>
+                <constraint firstAttribute="trailing" secondItem="jOf-fE-y6Y" secondAttribute="trailing" id="Zrb-V4-Muv"/>
+                <constraint firstItem="VBb-oe-Vla" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="a7R-PY-pvV"/>
+                <constraint firstItem="zzN-q1-fNG" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hQ2-0E-Vin"/>
+                <constraint firstItem="VBb-oe-Vla" firstAttribute="top" secondItem="jOf-fE-y6Y" secondAttribute="bottom" id="kXX-ef-Sro"/>
+                <constraint firstItem="zzN-q1-fNG" firstAttribute="top" secondItem="VBb-oe-Vla" secondAttribute="bottom" id="nYe-YT-YH4"/>
+                <constraint firstItem="zzN-q1-fNG" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="qwe-8X-MFe"/>
+                <constraint firstItem="jOf-fE-y6Y" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="vhb-sA-VNH"/>
+                <constraint firstItem="zzN-q1-fNG" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="yo0-qB-ILu"/>
+            </constraints>
+            <point key="canvasLocation" x="19.083969465648853" y="20.422535211267608"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="jiuItem3">
+            <color red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

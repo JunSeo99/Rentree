@@ -73,11 +73,11 @@
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" text="1000원/일" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WMs-6P-g1b">
                                                                 <rect key="frame" x="5.9999999999999964" y="4" width="54.666666666666657" height="15"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="textColor" name="jiuHomeTagFont"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
-                                                        <color key="backgroundColor" red="0.23499999940395355" green="0.73299998044967651" blue="0.51800000667572021" alpha="0.70449501811594206" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" name="jiuItem2"/>
                                                         <constraints>
                                                             <constraint firstAttribute="trailing" secondItem="WMs-6P-g1b" secondAttribute="trailing" constant="6" id="2QP-ap-WFa"/>
                                                             <constraint firstAttribute="height" constant="23" id="I7i-fg-hyb"/>
@@ -92,11 +92,11 @@
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" text="장기 가능" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6RF-9g-Isp">
                                                                 <rect key="frame" x="6" y="4" width="45" height="15"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="textColor" name="jiuHomeTagFont"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
-                                                        <color key="backgroundColor" red="0.23499999940395355" green="0.73299998044967651" blue="0.51800000667572021" alpha="0.69979619565217388" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" name="jiuItem2"/>
                                                         <constraints>
                                                             <constraint firstItem="6RF-9g-Isp" firstAttribute="leading" secondItem="rUo-aZ-XG8" secondAttribute="leading" constant="6" id="7TT-62-q4s"/>
                                                             <constraint firstItem="6RF-9g-Isp" firstAttribute="top" secondItem="rUo-aZ-XG8" secondAttribute="top" constant="4" id="Vf4-Xu-E4J"/>
@@ -292,6 +292,12 @@
         </namedColor>
         <namedColor name="jiuFontMain">
             <color red="0.10980392156862745" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="jiuHomeTagFont">
+            <color red="0.4392156862745098" green="0.4392156862745098" blue="0.44313725490196076" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="jiuItem2">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="jiuItem3">
             <color red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

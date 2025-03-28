@@ -7,12 +7,14 @@
 
 import Moya
 
-let chatBaseURL = "http://ec2-13-209-238-93.ap-northeast-2.compute.amazonaws.com:8080"
+let chatBaseURL = "http://localhost:8080"
 
 enum ChatAPI{
     case getRoomListItem(userId: String,roomId: String)
+    
+    case getRoomTarget(userId: String, targetId: String)
     case getRoomInformation(userId: String,roomId: String)
-    case getRoomList(userId: String,type: String = "A",schoolId: String?,districtId: String?,date: String?)
+    case getRoomList(userId: String)
     case findRooms(userId: String,query: String?,schoolId: String, districtId: String)
     case getMessageList(userId: String,roomId:String)
     case getMiddleMessage(userId: String,roomId:String, messageId: String)
@@ -22,11 +24,11 @@ enum ChatAPI{
     case getOldMessages(userId: String,roomId:String,oldId:String)
     case getRoomParticipants(roomId:String)
     case getRandomProfileImage(roomId: String)
-    case makeRoom(content:String,description: String,userId: String,image: ChatSettingProfileReactor.ProfileImage)
-    case modifyRoom(content:String, description: String, userId: String, image: ChatSettingProfileReactor.ProfileImage?, roomId: String)
+//    case makeRoom(content:String,description: String,userId: String,image: ChatSettingProfileReactor.ProfileImage)
+//    case modifyRoom(content:String, description: String, userId: String, image: ChatSettingProfileReactor.ProfileImage?, roomId: String)
     case registerPush(userId: String,token: String,device: String = "ios")
     case getFriends(userId: String)
-    case register(userId: String,nickname:String,schoolName:String,profileImage: UserDto2.ProfileImage?)
+//    case register(userId: String,nickname:String,schoolName:String,profileImage: UserDto2.ProfileImage?)
     case participateRoom(userId:String, roomId: String,image: String)
     case participateLocalRoom(userId:String, roomId: String,image: String,notificationStatus: Bool)
     case getBageCount(userId: String)
@@ -61,14 +63,12 @@ extension ChatAPI: TargetType{
             return "v1/room/item/\(userId)/\(roomId)"
         case .getRoomInformation(userId: let userId, roomId: let roomId):
            return "v2/room/\(userId)/\(roomId)"
-        case .getRoomList(userId: let userId,type: _, schoolId: _, districtId: _,date:_):
+        case .getRoomList(userId: let userId):
             return "v2/room/\(userId)/"
         case .getMessageList(userId: let userId, roomId: let roomId):
             return "v1/message/\(userId)/\(roomId)"
         case .getMiddleMessage(userId: let userId, roomId: let roomId, messageId: let messageId):
             return "v1/message/middle/\(userId)/\(roomId)/\(messageId)"
-        case .makeRoom:
-            return "v1/room"
         case .registerPush(userId: let userId, token: _, device: _):
             return "v1/user/push/\(userId)"
         case .getRecentMessages(userId: let userId,roomId: let roomId, recentId: let recentId):
@@ -81,8 +81,6 @@ extension ChatAPI: TargetType{
             return "v1/message/lastest/\(userId)/\(roomId)"
         case .getFriends(userId: let userId):
             return "v1/relation/\(userId)"
-        case .register:
-            return "v1/user/register"
         case .findRooms(userId: let userId,query: _,schoolId: _,districtId: _):
             return "v1/room/search/\(userId)"
         case .participateRoom(userId: let userId, roomId: let roomId,image: _):
@@ -111,26 +109,19 @@ extension ChatAPI: TargetType{
             return "v1/user/unblock/\(userId)/\(targetId)/\(roomId)"
         case .report:
             return "v1/report"
-        case .getManagerRoomList(managerId: let managerId):
-            return "v1/room/hr/\(managerId)"
-        case .getManagerRoomUsingApplicant(applicantId: let applicantId):
-            return "v1/room/hr/applicant/\(applicantId)"
-        case .getManagerRoom(managerId: let managerId,roomId: let roomId):
-            return "v1/room/hr/\(managerId)/\(roomId)"
-        case .getHRUserRoomList(userId: let userId):
-            return "v1/room/hr/user/\(userId)"
+
         case .removeMessage(roomId: let roomId,messageId: let messageId):
             return "v1/message/\(roomId)/\(messageId)"
         case .getCategorizedRooms:
             return "v2/room/category"
-        case .modifyRoom:
-            return "v1/room"
         case .delegatingHost(userId: let userId, targetId: let targetId, roomId: let roomId):
             return "v1/room/host/delegate/\(userId)/\(targetId)/\(roomId)"
         case .forcingToWithdrawal(userId: let userId, targetId: let targetId, roomId: let roomId):
             return "v1/room/host/withdrawal/\(userId)/\(targetId)/\(roomId)"
         case .getAlbaBageCount(userId: let userId):
             return "v1/room/alba/badgeCount/\(userId)"
+        case .getRoomTarget(userId: let userId, targetId: let targetId):
+            return "v2/room/target/\(userId)/\(targetId)"
         }
     }
     
@@ -138,8 +129,6 @@ extension ChatAPI: TargetType{
         switch self{
         case .getRoomList,.getMessageList:
             return .get
-        case .makeRoom:
-            return .post
         case .getRoomInformation:
             return .get
         case .registerPush:
@@ -156,8 +145,6 @@ extension ChatAPI: TargetType{
             return .get
         case .getFriends:
             return .get
-        case .register:
-            return .post
         case .findRooms:
             return .get
         case .participateRoom:
@@ -192,51 +179,22 @@ extension ChatAPI: TargetType{
             return .delete
         case .getCategorizedRooms:
             return .get
-        case .modifyRoom:
-            return .put
         case .forcingToWithdrawal:
             return .delete
         case .delegatingHost:
             return .put
         case .getAlbaBageCount:
             return .get
+        case .getRoomTarget:
+            return .get
         }
     }
     
     var task: Moya.Task {
         switch self{
-        case .makeRoom(content: let content, description: let description, userId: let userId,image: let imageData):
-//            let room = RoomSender(content: content, description: description, participants: participants, userId: userId, image: imageData)
-            var multiparts: [MultipartFormData] = [
-                .init(provider: .data(content.data(using: .utf8)!), name: "content"),
-                .init(provider: .data(description.data(using: .utf8)!), name: "description"),
-                .init(provider: .data(userId.data(using: .utf8)!), name: "userId"),
-//                .init(provider: .data("test".data(using: .utf8)!), name: "type"),
-//                .init(provider: .data(defaultImage.data(using: .utf8)!), name: "defaultImage"),
-            ]
-            switch imageData.image {
-            case .data(let data):
-                multiparts.append(.init(provider: .data(data), name: "image",fileName: "\(userId)\(Date.timeIntervalSinceReferenceDate).jpeg" ,mimeType: "image/jpeg"))
-            case .str(let str):
-                multiparts.append(.init(provider: .data("\(str)".data(using: .utf8)!), name: "defaultImage"))
-            }
-            return .uploadMultipart(multiparts)
-//            let data = try! encoder.encode(freinds)
-//            return .requestCompositeData(bodyData: data, urlParameters: [:])
-        case .getRoomList(userId: _,type: let type, schoolId: let schoolId, districtId: let districtId,date: let date):
-            var param: [String:Any] = user?.role == "ROLE_ADMIN" ? ["type": "test"] : ["type": type]
-            if let schoolId, let districtId {
-                param["schoolId"] = schoolId
-                param["districtId"] = districtId
-            }
-            if type == "M" {
-                param["type"] = "M"
-            }
-          
-            if let date{
-                param["date"] = date
-            }
-            return .requestParameters(parameters: param, encoding: URLEncoding.default)
+        case .getRoomList(userId: _):
+           
+            return .requestPlain
 //            return .requestParameters(parameters: ["userId":userId], encoding: URLEncoding.default)
         case .getMessageList,.getRecentMessages,.getOldMessages:
             return .requestPlain
@@ -255,28 +213,6 @@ extension ChatAPI: TargetType{
             return .requestPlain
         case .getFriends:
             return .requestPlain
-        case .register(userId: let userId, nickname: let nickname, schoolName: let schoolName,profileImage: let profileImage):
-            if let profileImage{
-                return .requestParameters(parameters: ["userId": userId,"nickname":nickname,"schoolName":schoolName,"schoolId": user!.schoolInformation!.id,"districtId": user!.schoolInformation!.districtId, "reason": user!.schoolInformation?.authenticationCode ?? 0,"profileImage": ["image": profileImage.image,"type": profileImage.type]], encoding: JSONEncoding.default)
-            }
-            else{
-                return .requestParameters(parameters: ["userId": userId,"nickname":nickname,"schoolName":schoolName,"schoolId": user!.schoolInformation!.id,"districtId": user!.schoolInformation!.districtId, "reason": user!.schoolInformation?.authenticationCode ?? 0], encoding: JSONEncoding.default)
-            }
-//            return .requestJSONEncodable()
-        case .findRooms(userId:_ ,query: let query,schoolId: let schoolId,districtId: let districtId):
-            var parameters:[String:String] = [:]
-            if let query{
-                parameters["query"] = query
-            }
-            if user?.role == "ROLE_ADMIN"{
-                parameters["type"] = "test"
-            }
-            if query?.isEmpty != false{
-                parameters["schoolId"] = schoolId
-                parameters["districtId"] = districtId
-            }
-           
-            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
         case .participateRoom(userId: _, roomId: _, image: let image):
             return .requestCompositeParameters(bodyParameters: ["image": image], bodyEncoding: JSONEncoding.default, urlParameters: [:])
 //            return .requestParameters(parameters: ["image": image], encoding: URLEncoding.default)
@@ -325,35 +261,16 @@ extension ChatAPI: TargetType{
             else{
                 return .requestParameters(parameters: ["userId": userId], encoding: URLEncoding.default)
             }
-        case .modifyRoom(content: let content, description: let description, userId: let userId, image: let imageData, roomId: let roomId):
-            var multiparts: [MultipartFormData] = [
-                .init(provider: .data(content.data(using: .utf8)!), name: "content"),
-                .init(provider: .data(description.data(using: .utf8)!), name: "description"),
-                .init(provider: .data(userId.data(using: .utf8)!), name: "userId"),
-                .init(provider: .data(roomId.data(using: .utf8)!), name: "roomId"),
-            ]
-            if let imageData{
-                switch imageData.image {
-                case .data(let data):
-                    multiparts.append(.init(provider: .data(data), name: "image",fileName: "\(userId)\(Date.timeIntervalSinceReferenceDate).jpeg" ,mimeType: "image/jpeg"))
-                case .str(let str):
-                    if let _ = URL(string: str){
-                        multiparts.append(.init(provider: .data("\(str)".data(using: .utf8)!), name: "imageURL"))
-                    }
-                    else{
-                        multiparts.append(.init(provider: .data("\(str)".data(using: .utf8)!), name: "defaultImage"))
-                    }
-                }
-            }
-            return .uploadMultipart(multiparts)
-            
-            
             
         case .forcingToWithdrawal:
             return .requestPlain
         case .delegatingHost:
             return .requestPlain
         case .getAlbaBageCount:
+            return .requestPlain
+        case .findRooms(userId: let userId, query: let query, schoolId: let schoolId, districtId: let districtId):
+            return .requestPlain
+        case .getRoomTarget:
             return .requestPlain
         }
     }

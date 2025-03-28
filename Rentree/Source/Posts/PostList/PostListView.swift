@@ -116,6 +116,15 @@ extension PostListView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let post = posts[indexPath.row]
+        let vc = PostDetailView(nibName: "PostDetailView", bundle: nil)
+        vc.post = post
+        vc.likeClicked
+            .subscribe(onNext: {[weak self] id in
+                guard let self else { return }
+                self.likeClicked(postId: id, state: post.likes.contains(where: {$0 == user.id}))
+            }).disposed(by: vc.disposeBag)
+        self.navigationController?.navigationController?.pushViewController(vc, animated: true)
+        
         
     }
     

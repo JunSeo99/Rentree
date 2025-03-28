@@ -1,6 +1,9 @@
 PODS:
   - Alamofire (5.10.2)
   - Differentiator (5.0.0)
+  - ImageViewer.swift (3.3.8)
+  - ImageViewer.swift/Fetcher (3.3.8):
+    - SDWebImage
   - Kingfisher (8.3.1)
   - Moya/Core (15.0.0):
     - Alamofire (~> 5.0)
@@ -32,6 +35,9 @@ PODS:
   - RxRelay (6.9.0):
     - RxSwift (= 6.9.0)
   - RxSwift (6.9.0)
+  - SDWebImage (5.21.0):
+    - SDWebImage/Core (= 5.21.0)
+  - SDWebImage/Core (5.21.0)
   - SnapKit (5.7.1)
   - Starscream (4.0.8)
   - Tabman (3.2.0):
@@ -40,6 +46,8 @@ PODS:
   - WeakMapTable (1.2.0)
 
 DEPENDENCIES:
+  - ImageViewer.swift (= 3.3.8)
+  - ImageViewer.swift/Fetcher (= 3.3.8)
   - Kingfisher
   - Moya/RxSwift
   - ReactorKit
@@ -56,6 +64,7 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - Differentiator
+    - ImageViewer.swift
     - Kingfisher
     - Moya
     - Pageboy
@@ -67,6 +76,7 @@ SPEC REPOS:
     - RxKeyboard
     - RxRelay
     - RxSwift
+    - SDWebImage
     - SnapKit
     - Starscream
     - Tabman
@@ -76,6 +86,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
+  ImageViewer.swift: 284cd8127d31af8e5938674fb9f8e695a4cdf6c6
   Kingfisher: 3204d23de16b5ea53541c44ca5a8efb55741dec3
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   Pageboy: 7f7886f61c76633df635861bf7839caf2cabdb3e
@@ -87,12 +98,13 @@ SPEC CHECKSUMS:
   RxKeyboard: 4f5863f43b4ff0cbb2a20b94688d6b80c8a43c14
   RxRelay: 6b0c930e5cef57d5fe2032571e5e65b78e3cbdb1
   RxSwift: 31649ace6aceeb422e16ff71c60804f9c3281ed9
+  SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
   Starscream: 19b5533ddb925208db698f0ac508a100b884a1b9
   Tabman: 49f9181a2bfe5c29d002864dac2de8e0b7ea9180
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
   WeakMapTable: 05c694ce8439a7a9ebabb56187287a63c57673d6
 
-PODFILE CHECKSUM: 2cb9ce5f1ff4dcbdd43880f1c842828f97f786d4
+PODFILE CHECKSUM: 64a9d20274e3bfa4a4016e12fe345f73e0793b2f
 
 COCOAPODS: 1.16.2

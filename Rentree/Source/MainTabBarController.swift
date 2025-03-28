@@ -5,9 +5,13 @@
 //  Created by jun on 3/25/25.
 //
 import UIKit
+import Moya
+import RxSwift
+import RxCocoa
 var isOpenModal: Bool = false
 class MainTabBarController: UITabBarController {
     let socketManager = SocketManager()
+    var disposeBag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,8 +44,11 @@ class MainTabBarController: UITabBarController {
         
        
         
-        let chatView = chattingStoryboard.instantiateViewController(withIdentifier: "RoomListView") as! RoomListView
-        chatView.reactor = .init(provider: .init(), initialState: .init(), socketManager: socketManager)
+        let chatView = RoomListView(nibName: "RoomListView", bundle: nil)
+        let chatProvider = MoyaProvider<ChatAPI>()
+        chatView.reactor = .init(chatProvider: chatProvider, socketManager: socketManager)
+        
+        
         let navi2 = MainNavigationViewController(rootViewController: chatView)
         navi2.tabBarItem = .init(title: "채팅", image: .chat.resize(newWidth: 34), tag: 2)
         navi2.title = "채팅"
@@ -52,6 +59,33 @@ class MainTabBarController: UITabBarController {
         profileNavi.title = "프로필"
         
         setViewControllers([postListNavi,navi1, navi2 ,profileNavi], animated: true)
+        
+        MainNotification.default
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: {[weak self, weak chatView] notification in
+                guard let notification, let self else { return }
+                MainNotification.default.onNext(nil)
+                
+                switch notification {
+                case .moveToRoom(let room):
+                    guard let chatView else { return }
+                    if chatView.isViewLoaded {
+                        chatView.reactor?.action.onNext(.itemSelected(room))
+                    }
+                    else{
+                       
+                        
+                        self.selectedIndex = 2
+                        chatView.reactor?.state.map({$0.rooms})
+                            .filter({!$0.isEmpty})
+                            .take(1)
+                            .subscribe(onNext: {  _ in
+                                self.selectedIndex = 2
+                                chatView.reactor?.action.onNext(.itemSelected(room))
+                            }).disposed(by: chatView.disposeBag)
+                    }
+                }
+            }).disposed(by: disposeBag)
         
         
 //        let postListView = PostListView(nibName: "PostListView", bundle: nil)

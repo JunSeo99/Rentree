@@ -15,6 +15,9 @@ import PhotosUI
 import Kingfisher
 
 class ProfileView: UIViewController {
+    @IBOutlet weak var progressBackground: UIView!
+    @IBOutlet weak var progressView: UIView!
+    
     @IBOutlet weak var imageWidth: NSLayoutConstraint!
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var blurEffectView: UIVisualEffectView!
@@ -22,17 +25,19 @@ class ProfileView: UIViewController {
     @IBOutlet weak var cameraButton: UIButton!
     @IBOutlet weak var nicknameLabel: UILabel!
     @IBOutlet weak var schollName: UILabel!
-    @IBOutlet weak var myItemButton: UIButton!
-    
+//    @IBOutlet weak var myItemButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
-    
     @IBOutlet weak var setUnivButton: UIButton!
+    
     var navigationView: ProfileNavigationView?
     let provider: MoyaProvider<API> = .init()
     var disposeBag: DisposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        progressView.layer.cornerRadius = 13
+        progressBackground.layer.cornerRadius = 13
         scrollView.alwaysBounceVertical = true
         navigationController?.navigationController?.setNavigationBarHidden(true, animated: true)
         
@@ -47,9 +52,9 @@ class ProfileView: UIViewController {
         schollName.superview?.superview?.layer.borderWidth = 1
         schollName.superview?.superview?.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).cgColor
         
-        myItemButton.layer.cornerRadius = 18
-        myItemButton.layer.borderWidth = 1
-        myItemButton.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).cgColor
+//        myItemButton.layer.cornerRadius = 18
+//        myItemButton.layer.borderWidth = 1
+//        myItemButton.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).cgColor
         
         
         scrollView.contentInsetAdjustmentBehavior = .never

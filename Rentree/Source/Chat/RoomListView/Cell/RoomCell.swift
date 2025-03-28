@@ -42,7 +42,7 @@ class RoomCell: UITableViewCell, NibReusable {
             dateLabel.text = DateConverter.dateToString(string: room.lastMessage.date)
             contentLabel.text = room.lastMessage.content
         }
-        nicknameLabel.text = room.names.joined(separator: " ・ ")
+        nicknameLabel.text = room.content
         unreadView.isHidden = room.unreadCount <= 0
         if room.unreadCount < 1000{
             unreadCountLabel.text = "\(room.unreadCount)"
@@ -55,11 +55,11 @@ class RoomCell: UITableViewCell, NibReusable {
         }
         noticeImageView.image = room.notificationStatus ?  UIImage(named: "notification_on") : UIImage(named: "notification_off")
         if let imageStr = room.image {
-            if let image = UIImage(named: imageStr) {
-                profileImageView.image = image
-            }
-            else if let url = URL(string: imageStr) {
+            if let url = URL(string: imageStr) {
                 profileImageView.kf.setImage(with: url)
+            }
+            else if let image = UIImage(named: imageStr) {
+                profileImageView.image = image
             }
             else{
                 profileImageView.image = UIImage(resource: .iconMan)

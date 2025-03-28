@@ -41,34 +41,32 @@ struct Room: RoomType {
     var type: String
     var unreadCount: Int
     var notificationStatus: Bool
-    var names: [String]
+    var content: String
     var gender: Int?
     var lastMessage: RoomListItem.LastMessage
-    var partnerOut: Bool
     var isBlock: Bool
     var image: String?
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.unreadCount = try container.decode(Int.self, forKey: .unreadCount)
         self.notificationStatus = try container.decode(Bool.self, forKey: .notificationStatus)
-        self.names = try container.decode([String?].self, forKey: .names).compactMap({$0})
+        self.content = try container.decode(String.self, forKey: .content)
         self.lastMessage = try container.decode(RoomListItem.LastMessage.self, forKey: .lastMessage)
         self.id = try container.decode(String.self, forKey: .id)
+        self.image = try container.decode(String.self, forKey: .image)
         self.isBlock = (try? container.decode(Bool?.self, forKey: .isBlock)) ?? false
-//        self.type = (try? container.decode(String?.self, forKey: .type)) ?? "HR"
-        self.partnerOut = try container.decode(Bool.self, forKey: .partnerOut)
-        self.image = try container.decodeIfPresent(String.self, forKey: .image)
         self.gender = try container.decodeIfPresent(Int.self, forKey: .gender)
+        self.type = (try container.decodeIfPresent(String.self, forKey: .type)) ?? ""
     }
-    init(id: String, type: String, unreadCount: Int, notificationStatus: Bool, names: [String], lastMessage: RoomListItem.LastMessage, partnerOut: Bool, isBlock: Bool) {
+    init(id: String, type: String,image: String?, unreadCount: Int, notificationStatus: Bool, content: String, lastMessage: RoomListItem.LastMessage, partnerOut: Bool, isBlock: Bool) {
         self.id = id
         self.type = type
         self.unreadCount = unreadCount
         self.notificationStatus = notificationStatus
-        self.names = names
+        self.content = content
         self.lastMessage = lastMessage
-        self.partnerOut = partnerOut
         self.isBlock = isBlock
+        self.image = image
     }
 }
 

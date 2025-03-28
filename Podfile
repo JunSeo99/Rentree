@@ -18,6 +18,10 @@ target 'Rentree' do
   pod "Starscream"
   pod 'Kingfisher'
   
+  pod 'ImageViewer.swift', '3.3.8'
+  pod 'ImageViewer.swift/Fetcher', '3.3.8'
+  
+  
   post_install do |installer|
       installer.generated_projects.each do |project|
           project.targets.each do |target|

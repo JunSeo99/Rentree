@@ -42,7 +42,7 @@ class PostListViewCell: UITableViewCell, NibReusable {
         
         longPeriodView.layer.cornerRadius = 5
         priceView.layer.cornerRadius = 5
-        
+        contentLabel.textContainer.maximumNumberOfLines = 3
         
         self.selectionStyle = .none
     }
@@ -66,8 +66,19 @@ class PostListViewCell: UITableViewCell, NibReusable {
         sharedLabel.text = "\(post.borrowerInfo.count)"
         
         likeClicked.onNext(post.id)
-        priceLabel.text = "\(post.price)"
-        longPeriodLabel.text = post.rentalType
+        if post.rentalType == "무료" {
+            priceLabel.text = "무료 대여"
+            longPeriodLabel.text = post.priceByPeriod
+        }
+        else {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            
+            priceLabel.text = "\(formatter.string(from: NSNumber(value: post.price)) ?? "\(post.price)")원/\(post.priceByPeriod)"
+            longPeriodLabel.text = post.rentalType
+        }
+        
+        
         
         likeButton.rx.tap
             .subscribe(onNext: {[weak self] _ in

@@ -13,7 +13,13 @@ enum API{
     case setUniv(userId: String, univName: String)
     case registerProfileImage(userId: String, profile: Data?)
     case like(postId: String, userId: String, state: Bool)
+    case borrowing(postId: String, userId: String)
+    case allowBorrowing(postId: String, userId: String)
+    case getMyPost(userId: String)
+    case getBorrowedPost(userId: String)
         
+    
+    case returnBack(postId: String, borrowerId: String, image: Data)
 }
 extension API:TargetType{
     var headers: [String : String]? {
@@ -37,6 +43,16 @@ extension API:TargetType{
             return "/user/profile"
         case .like:
             return "/post/sendPostLikeSwitch"
+        case .borrowing:
+            return "/post/request"
+        case .allowBorrowing:
+            return "/post/allow"
+        case .getMyPost:
+            return "/post/lent"
+        case .getBorrowedPost:
+            return "/post/borrow"
+        case .returnBack:
+            return "/post/return"
         }
     }
     
@@ -51,6 +67,16 @@ extension API:TargetType{
         case .registerProfileImage:
             return .post
         case .like:
+            return .post
+        case .borrowing:
+            return .post
+        case .allowBorrowing:
+            return .put
+        case .getMyPost(userId: let userId):
+            return .get
+        case .getBorrowedPost(userId: let userId):
+            return .get
+        case .returnBack:
             return .post
         }
     }
@@ -74,6 +100,21 @@ extension API:TargetType{
         case .like(postId: let postId, userId: let userId, state: let state):
             return .requestParameters(parameters: ["postId": postId, "userId": userId, "state": state], encoding: URLEncoding.queryString)
             
+        case .borrowing(postId: let postId, userId: let userId):
+            return .requestParameters(parameters: ["postId": postId, "borrowerId": userId], encoding: URLEncoding.queryString)
+        case .allowBorrowing(postId: let postId, userId: let userId):
+            return .requestParameters(parameters: ["postId": postId, "borrowerId": userId], encoding: URLEncoding.queryString)
+        case .getMyPost(userId: let userId):
+            return .requestParameters(parameters: ["userId": userId], encoding: URLEncoding.queryString)
+        case .getBorrowedPost(userId: let userId):
+            return .requestParameters(parameters: ["userId": userId], encoding: URLEncoding.queryString)
+        case .returnBack(postId: let postId, borrowerId: let borrowerId, image: let image):
+            var multipartFormDatas: [MultipartFormData] = []
+            multipartFormDatas.append(.init(provider: .data(postId.data(using: .utf8)!), name: "postId"))
+            multipartFormDatas.append(.init(provider: .data(borrowerId.data(using: .utf8)!), name: "borrowerId"))
+            multipartFormDatas.append(.init(provider: .data(image), name: "returnImage",fileName: "\(borrowerId)\(Date.timeIntervalSinceReferenceDate).jpeg" ,mimeType: "image/jpeg"))
+            return .uploadMultipart(multipartFormDatas)
+//            return .requestParameters(parameters: ["userId": userId, "borrowerId": borrowerId], encoding: URLEncoding.queryString)
         }
     }
 }
