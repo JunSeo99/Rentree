@@ -187,6 +187,7 @@ class ChatReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .sendButtonClicked(let str):
+            var userId = user.id
             if str.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 return .empty()
             }
