@@ -42,6 +42,6 @@
 
 ## 🖼️ 시연 이미지
 
-| 메인 페이지 | 게시판 | 채팅 | 내 물품 |
-|-------------|--------|--------|--------|
-| ![main](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/firstscreen.png) | ![board](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/secondscreen.png) | ![chat](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/third.png) | ![my](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/screen4.png) |
+| 인트로1 | 인트로2 | 메인 페이지 | 게시판 | 채팅 | 내 물품 |
+|-------------|--------|--------|--------|--------|--------|
+| ![main](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/intro1.png) | ![main](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/intro2.png) | ![main](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/firstscreen.png) | ![board](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/secondscreen.png) | ![chat](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/third.png) | ![my](https://zeroton-rentree.s3.ap-northeast-2.amazonaws.com/screen4.png) |
