@@ -195,7 +195,7 @@ class RoomListReactor: Reactor {
                 })
                 
         case .itemSelected(var item):
-            let chatReactor = ChatReactor(socketManager: self.socketManager, provider: self.chatProvider, room: item)
+            let chatReactor = ChatReactor(socketManager: self.socketManager, provider: self.chatProvider, room: item, userId: user.id)
             item.unreadCount = 0
             if !currentState.rooms.contains(where: {$0.id == item.id}) {
                 var newRooms = currentState.rooms

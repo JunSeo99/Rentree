@@ -21,15 +21,16 @@ class ChatReactor: Reactor {
         var animated: Bool
         var shake: Bool
     }
-    var userId = user.id
+    var userId: String
     let dateConverter = ChatDateConverter()
     var initialState: State
     let socketManager: SocketManager
     let provider: MoyaProvider<ChatAPI>
     let jsonEncoder = JSONEncoder()
     let jsonDecoder = JSONDecoder()
-    init(socketManager: SocketManager,provider: MoyaProvider<ChatAPI>,room: any RoomType) {
+    init(socketManager: SocketManager,provider: MoyaProvider<ChatAPI>,room: any RoomType, userId: String) {
         self.initialState = .init(roomId: room.id,room: room)
+        self.userId = user.id
         self.socketManager = socketManager
         self.provider = provider
     }
@@ -187,7 +188,6 @@ class ChatReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .sendButtonClicked(let str):
-            var userId = user.id
             if str.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 return .empty()
             }

@@ -368,7 +368,7 @@ class MyPostReactor: Reactor {
                 return .just(.setOpenedSectionIds(newIds))
             }
         case .returnBack(postId: let postId, borrowerId: let borrowerId, image: let image):
-            return provider.rx.request(API.allowBorrowing(postId: postId, userId: borrowerId))
+            return provider.rx.request(API.returnBack(postId: postId, borrowerId: borrowerId, image: image))
                 .asObservable()
                 .flatMap({[weak self] datas -> Observable<Mutation> in
                     guard let self else {return .empty() }
