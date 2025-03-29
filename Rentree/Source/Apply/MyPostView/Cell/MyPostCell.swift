@@ -11,8 +11,11 @@ import RxCocoa
 import Reusable
 import Kingfisher
 
-class MyPostCell: UITableViewCell, Reusable {
-
+class MyPostCell: UITableViewCell, NibReusable {
+    @IBOutlet weak var openStackView: UIStackView!
+    
+    @IBOutlet weak var chatCountLabel: UILabel!
+    @IBOutlet weak var arrowImageView: UIImageView!
     @IBOutlet weak var contentImageView: UIImageView!
 //    @IBOutlet weak var dateLabel: UILabel!
 //    @IBOutlet weak var sharedLabel: UILabel!
@@ -34,7 +37,6 @@ class MyPostCell: UITableViewCell, Reusable {
     var openClicked: PublishSubject<Void> = .init()
     var goToPostClicked: PublishSubject<Void> = .init()
     
-    
     var disposeBag = DisposeBag()
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -49,11 +51,20 @@ class MyPostCell: UITableViewCell, Reusable {
         contentLabel.textContainer.maximumNumberOfLines = 3
         
         self.selectionStyle = .none
+        self.arrowImageView.transform = .init(rotationAngle: .pi)
     }
     
     func bindUI(post: Post) {
+        chatCountLabel.text = "채팅 \(post.borrowerInfo.count)건"
         openButton.rx.tap
+            .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] _ in
+                if self?.arrowImageView.transform == .identity {
+                    self?.arrowImageView.transform = .init(rotationAngle: .pi)
+                }
+                else {
+                    self?.arrowImageView.transform = .identity
+                }
                 self?.openClicked.onNext(())
             }).disposed(by: disposeBag)
         goToPostButton.rx.tap
@@ -61,6 +72,13 @@ class MyPostCell: UITableViewCell, Reusable {
                 self?.goToPostClicked.onNext(())
             }).disposed(by: disposeBag)
 //        self.nameLabel.text = post.name
+        
+        if post.borrowerInfo.isEmpty {
+            openStackView.isHidden = true
+        }
+        else {
+            openStackView.isHidden = false
+        }
         self.titleLabel.text = post.title
         self.contentLabel.text = post.content
 //        self.dateLabel.text = DateConverter.dateToString(string: post.createdAt)
@@ -90,7 +108,6 @@ class MyPostCell: UITableViewCell, Reusable {
         }
         
         
-        
 //        likeButton.rx.tap
 //            .subscribe(onNext: {[weak self] _ in
 //                self?.likeClicked.onNext(post.id)
@@ -108,10 +125,47 @@ class MyPostCell: UITableViewCell, Reusable {
         
     }
     
+    func selected(_ selected: Bool, animated: Bool) {
+        print("cellSelected::",selected,"animated: ",animated)
+        if selected {
+//            let contentHeight = applicants.reduce(0.0, {$0 + ApplicantCell.calculateHeight($1)})
+            self.arrowImageView.transform = .identity
+//            self.tableView.reloadData()
+//            self.tableViewHeight.constant = contentHeight
+//            if animated {
+////                UIView.animate(withDuration: 0.3, delay: 0,options: .curveEaseIn , animations: {[weak self] in
+////                    guard let self else { return }
+//                    self.contentView.layoutIfNeeded()
+//                    self.layoutUpdate.onNext(())
+////                })
+//            }
+//            else{
+//                self.contentView.layoutIfNeeded()
+//                layoutUpdate.onNext(Void())
+//            }
+        }
+        else{
+            self.arrowImageView.transform = .init(rotationAngle: .pi)
+//            self.tableViewHeight.constant = 0
+//            self.contentView.layoutIfNeeded()
+//            if animated {
+////                UIView.animate(withDuration: 0.3, delay: 0,options: .curveEaseIn , animations: {[weak self] in
+////                    guard let self else { return }
+//                    self.contentView.layoutIfNeeded()
+//                    self.layoutUpdate.onNext(())
+////                })
+//            }
+//            else{
+//                self.contentView.layoutIfNeeded()
+//                layoutUpdate.onNext(())
+//            }
+        }
+    }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         contentImageView.image = nil
         disposeBag = DisposeBag()
+        
     }
 }

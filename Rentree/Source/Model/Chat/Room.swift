@@ -28,6 +28,7 @@ struct RoomListItem: RoomType {
     var hostId: String?
     var forcedWithdrawal: Bool?
     var brokenRoom: Bool?
+    var postInformation: String
     struct LastMessage: Codable,Equatable  {
         var content: String
         let date: String
@@ -46,6 +47,7 @@ struct Room: RoomType {
     var lastMessage: RoomListItem.LastMessage
     var isBlock: Bool
     var image: String?
+    var postInformation: String
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.unreadCount = try container.decode(Int.self, forKey: .unreadCount)
@@ -57,8 +59,9 @@ struct Room: RoomType {
         self.isBlock = (try? container.decode(Bool?.self, forKey: .isBlock)) ?? false
         self.gender = try container.decodeIfPresent(Int.self, forKey: .gender)
         self.type = (try container.decodeIfPresent(String.self, forKey: .type)) ?? ""
+        self.postInformation = try container.decode(String.self, forKey: .postInformation)
     }
-    init(id: String, type: String,image: String?, unreadCount: Int, notificationStatus: Bool, content: String, lastMessage: RoomListItem.LastMessage, partnerOut: Bool, isBlock: Bool) {
+    init(id: String, type: String,image: String?, unreadCount: Int, notificationStatus: Bool, content: String, lastMessage: RoomListItem.LastMessage, partnerOut: Bool, isBlock: Bool, postInformation: String) {
         self.id = id
         self.type = type
         self.unreadCount = unreadCount
@@ -67,6 +70,7 @@ struct Room: RoomType {
         self.lastMessage = lastMessage
         self.isBlock = isBlock
         self.image = image
+        self.postInformation = postInformation
     }
 }
 

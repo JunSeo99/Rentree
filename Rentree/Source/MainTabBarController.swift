@@ -69,12 +69,11 @@ class MainTabBarController: UITabBarController {
                 switch notification {
                 case .moveToRoom(let room):
                     guard let chatView else { return }
+                    navigationController?.popToRootViewController(animated: true)
                     if chatView.isViewLoaded {
                         chatView.reactor?.action.onNext(.itemSelected(room))
                     }
                     else{
-                       
-                        
                         self.selectedIndex = 2
                         chatView.reactor?.state.map({$0.rooms})
                             .filter({!$0.isEmpty})
@@ -84,14 +83,34 @@ class MainTabBarController: UITabBarController {
                                 chatView.reactor?.action.onNext(.itemSelected(room))
                             }).disposed(by: chatView.disposeBag)
                     }
+                case .moveToPost(let post):
+                    navigationController?.popToRootViewController(animated: true)
+                    let vc = PostDetailView(nibName: "PostDetailView", bundle: nil)
+                    vc.rx.viewDidLoad
+                        .subscribe(onNext: {[weak vc] _ in
+                            vc?.borrowButton.isHidden = true
+                            
+                        }).disposed(by: vc.disposeBag)
+                    vc.post = post
+                    navigationController?.pushViewController(vc, animated: true)
+//                    if chatView.isViewLoaded {
+//                        chatView.reactor?.action.onNext(.itemSelected(room))
+//                    }
+//                    else{
+//                        self.selectedIndex = 2
+//                        chatView.reactor?.state.map({$0.rooms})
+//                            .filter({!$0.isEmpty})
+//                            .take(1)
+//                            .subscribe(onNext: {  _ in
+//                                self.selectedIndex = 2
+//                                chatView.reactor?.action.onNext(.itemSelected(room))
+//                            }).disposed(by: chatView.disposeBag)
+//                    }
+                case .refresh:
+                    break
                 }
             }).disposed(by: disposeBag)
         
-        
-//        let postListView = PostListView(nibName: "PostListView", bundle: nil)
-//        let postListNavi = MainNavigationViewController(rootViewController: postListView)
-//        postListNavi.title = "상품"
-//        viewControllers?.append(postListNavi)
         updateTabBarAppearance()
         
         

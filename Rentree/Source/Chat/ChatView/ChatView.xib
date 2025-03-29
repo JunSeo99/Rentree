@@ -11,7 +11,16 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatView" customModule="Rentree" customModuleProvider="target">
             <connections>
+                <outlet property="contentImageView" destination="ACF-dk-E7o" id="v0g-Cu-0uC"/>
+                <outlet property="contentLabel" destination="3kA-cB-Voa" id="fDV-WF-z4E"/>
+                <outlet property="longPeriodLabel" destination="wc0-ok-7Fm" id="5o7-RU-cpx"/>
+                <outlet property="longPeriodView" destination="2C6-B1-e7m" id="NxH-8B-faG"/>
+                <outlet property="postWrapView" destination="edX-2d-Odl" id="K2z-tn-b5i"/>
+                <outlet property="priceLabel" destination="28C-b9-IiJ" id="Vj4-Rs-ndi"/>
+                <outlet property="priceView" destination="GuA-WX-FMI" id="sZw-3c-9JJ"/>
+                <outlet property="rentalButton" destination="2IY-SN-Bnl" id="Ita-cK-Fza"/>
                 <outlet property="tableView" destination="bZA-1L-wgH" id="Fez-EE-QX6"/>
+                <outlet property="titleLabel" destination="ocM-XZ-iSy" id="gyv-y5-0ln"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -32,11 +41,135 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="edX-2d-Odl">
+                    <rect key="frame" x="12" y="72" width="369" height="168"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="kmn-Xa-qcj">
+                            <rect key="frame" x="20" y="10" width="329" height="148"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="BKj-bb-SFM">
+                                    <rect key="frame" x="0.0" y="0.0" width="329" height="90"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ACF-dk-E7o">
+                                            <rect key="frame" x="0.0" y="4" width="80" height="80"/>
+                                            <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" priority="999" constant="80" id="IXl-Nv-xHV"/>
+                                                <constraint firstAttribute="width" constant="80" id="d25-Xg-jUD"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </imageView>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="VbY-ZM-mwg">
+                                            <rect key="frame" x="91" y="0.0" width="238" height="88"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="제목" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ocM-XZ-iSy">
+                                                    <rect key="frame" x="0.0" y="5" width="26" height="18"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                    <color key="textColor" name="jiuFontMain"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="skeletonCornerRadius">
+                                                            <real key="value" value="5"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="linesCornerRadius">
+                                                            <integer key="value" value="5"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="skeletonLineSpacing">
+                                                            <real key="value" value="1"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="useFontLineHeight" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="752" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="ggg" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3kA-cB-Voa">
+                                                    <rect key="frame" x="0.0" y="27" width="37" height="34"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="textColor" name="jiuFontMain"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="0lk-Lm-04a">
+                                                    <rect key="frame" x="0.0" y="65" width="128.66666666666666" height="23"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GuA-WX-FMI">
+                                                            <rect key="frame" x="0.0" y="0.0" width="66.666666666666671" height="23"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" text="1000원/일" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28C-b9-IiJ">
+                                                                    <rect key="frame" x="5.9999999999999964" y="4" width="54.666666666666657" height="15"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                                                    <color key="textColor" name="jiuHomeTagFont"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <color key="backgroundColor" name="jiuItem2"/>
+                                                            <constraints>
+                                                                <constraint firstItem="28C-b9-IiJ" firstAttribute="top" secondItem="GuA-WX-FMI" secondAttribute="top" constant="4" id="5Ui-Np-D8X"/>
+                                                                <constraint firstAttribute="bottom" secondItem="28C-b9-IiJ" secondAttribute="bottom" constant="4" id="HGn-ub-CTm"/>
+                                                                <constraint firstAttribute="height" constant="23" id="UBf-pD-9N5"/>
+                                                                <constraint firstItem="28C-b9-IiJ" firstAttribute="leading" secondItem="GuA-WX-FMI" secondAttribute="leading" constant="6" id="v76-CE-ngO"/>
+                                                                <constraint firstAttribute="trailing" secondItem="28C-b9-IiJ" secondAttribute="trailing" constant="6" id="vfU-Iv-AZ5"/>
+                                                            </constraints>
+                                                        </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2C6-B1-e7m">
+                                                            <rect key="frame" x="71.666666666666657" y="0.0" width="57" height="23"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" text="장기 가능" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wc0-ok-7Fm">
+                                                                    <rect key="frame" x="6" y="4" width="45" height="15"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                                                    <color key="textColor" name="jiuHomeTagFont"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <color key="backgroundColor" name="jiuItem2"/>
+                                                            <constraints>
+                                                                <constraint firstItem="wc0-ok-7Fm" firstAttribute="leading" secondItem="2C6-B1-e7m" secondAttribute="leading" constant="6" id="99R-jg-1ow"/>
+                                                                <constraint firstAttribute="bottom" secondItem="wc0-ok-7Fm" secondAttribute="bottom" constant="4" id="eYD-yx-znG"/>
+                                                                <constraint firstAttribute="height" constant="23" id="fic-nH-elN"/>
+                                                                <constraint firstItem="wc0-ok-7Fm" firstAttribute="top" secondItem="2C6-B1-e7m" secondAttribute="top" constant="4" id="i2i-or-TxK"/>
+                                                                <constraint firstAttribute="trailing" secondItem="wc0-ok-7Fm" secondAttribute="trailing" constant="6" id="o44-a2-DKD"/>
+                                                            </constraints>
+                                                        </view>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <edgeInsets key="layoutMargins" top="5" left="0.0" bottom="0.0" right="0.0"/>
+                                        </stackView>
+                                    </subviews>
+                                    <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="2" right="0.0"/>
+                                </stackView>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2IY-SN-Bnl">
+                                    <rect key="frame" x="0.0" y="106" width="329" height="42"/>
+                                    <color key="backgroundColor" red="0.25882352939999997" green="0.51764705879999995" blue="0.95686274510000002" alpha="0.2991773593" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="42" id="d5d-io-D3q"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="대여 완료">
+                                        <color key="titleColor" name="jiuBlue"/>
+                                    </state>
+                                </button>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="kmn-Xa-qcj" secondAttribute="trailing" constant="20" id="6NS-AT-1mj"/>
+                        <constraint firstAttribute="bottom" secondItem="kmn-Xa-qcj" secondAttribute="bottom" constant="10" id="Ejj-d7-a1n"/>
+                        <constraint firstItem="kmn-Xa-qcj" firstAttribute="top" secondItem="edX-2d-Odl" secondAttribute="top" constant="10" id="RUh-NK-atq"/>
+                        <constraint firstItem="kmn-Xa-qcj" firstAttribute="leading" secondItem="edX-2d-Odl" secondAttribute="leading" constant="20" id="jEs-hY-bP1"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="edX-2d-Odl" secondAttribute="trailing" constant="12" id="7rU-hZ-hhO"/>
+                <constraint firstItem="edX-2d-Odl" firstAttribute="top" secondItem="N0h-JC-pWw" secondAttribute="bottom" constant="12" id="EgC-aQ-0sd"/>
                 <constraint firstItem="N0h-JC-pWw" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="MK1-q2-6hP"/>
+                <constraint firstItem="edX-2d-Odl" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="12" id="f5X-OW-eC1"/>
                 <constraint firstAttribute="trailing" secondItem="N0h-JC-pWw" secondAttribute="trailing" id="oAa-53-Z5s"/>
                 <constraint firstItem="N0h-JC-pWw" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tHu-Eo-mOm"/>
             </constraints>
@@ -44,6 +177,18 @@
         </view>
     </objects>
     <resources>
+        <namedColor name="jiuBlue">
+            <color red="0.25882352941176473" green="0.51764705882352946" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="jiuFontMain">
+            <color red="0.10980392156862745" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="jiuHomeTagFont">
+            <color red="0.4392156862745098" green="0.4392156862745098" blue="0.44313725490196076" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="jiuItem2">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="jiuItem3">
             <color red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

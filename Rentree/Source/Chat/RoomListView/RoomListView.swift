@@ -23,7 +23,7 @@ class RoomListView: UIViewController, StoryboardView {
     var viewDidLoaded = false
     func bind(reactor: RoomListReactor) {
         reactor.action.onNext(.refresh)
-//        reactor.action.onNext(.registerSocket)
+        reactor.action.onNext(.registerSocket)
         reactor.action.onNext(.registerSocketConnect)
 
         tableView.rx.setDelegate(self)
@@ -217,10 +217,6 @@ class RoomListReactor: Reactor {
                 .flatMap {[weak self] ws ,text -> Observable<Mutation> in
                     guard let self, let data = text.data(using: .utf8) else {return .empty()}
                     let jsonDecoder = JSONDecoder()
-                    if let refresh = try? jsonDecoder.decode(JSONData.self, from: data) ,
-                       case let .object(r) = refresh, case let .string(type) = r["type"], type == "alba_room_refresh" {
-                        return self.mutate(action: .refresh)
-                    }
                     if let removed = try? jsonDecoder.decode(RemoveChat.self, from: data){
                         var rooms = self.currentState.rooms
                         guard let roomIndex = rooms.firstIndex(where: {
@@ -235,9 +231,6 @@ class RoomListReactor: Reactor {
                         if let roomIndex = currentRooms.firstIndex(where: { item in
                             item.id == chat.roomId
                         }){
-                            if chat.block == true{
-                                return .empty()
-                            }
                             if chat.type == "chat" || chat.type == "image" {
                                 var removed = currentRooms.remove(at: roomIndex)
                                 removed.lastMessage = .init(content: chat.content,date: chat.createdAt, messageId: chat.id, containMention: (chat.mention?.userId == user.id) || removed.lastMessage.containMention)

@@ -18,6 +18,16 @@ import Moya
 
 class PostDetailView: UIViewController {
     
+    @IBOutlet weak var dateLabel: UILabel!
+    
+    @IBOutlet weak var questionMarkButton: UIButton!
+    @IBOutlet weak var notiView: UIView!
+//    @IBOutlet weak var progressMultiple: NSLayoutConstraint!
+    @IBOutlet weak var treeImageView: UIImageView!
+    @IBOutlet weak var progressView: UIView!
+    @IBOutlet weak var progressBackgroundView: UIView!
+    
+    
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var collectionView: UICollectionView!
@@ -28,7 +38,7 @@ class PostDetailView: UIViewController {
     @IBOutlet weak var contentLabel: UILabel!
     
     
-    @IBOutlet weak var dateLabel: UILabel!
+//    @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var sharedLabel: UILabel!
     @IBOutlet weak var likeLabel: UILabel!
     //    @IBOutlet weak var tagLabel: UILabel!
@@ -52,6 +62,7 @@ class PostDetailView: UIViewController {
     var post: Post?
     
     var provider = MoyaProvider<API>()
+    var chatProvider = MoyaProvider<ChatAPI>()
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -63,11 +74,41 @@ class PostDetailView: UIViewController {
     }
     
     func setUI(post: Post) {
+        dateLabel.text = formatRelativeDate(dateString: post.createdAt)
         
+        progressView.layer.cornerRadius = 4.5
+        progressBackgroundView.layer.cornerRadius = 4.5
         profileImageView.backgroundColor = .jiuItem3
         profileImageView.layer.cornerRadius = 28
         nameLabel.text = post.name
         schoolLabel.text = post.schoolCode
+        if let url = URL(string: post.profileImage) {
+            profileImageView.kf.setImage(with: url)
+        }
+        
+        notiView.layer.cornerRadius = 12
+        notiView.layer.borderWidth = 1
+        notiView.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).cgColor
+        notiView.layer.applySketchShadow(color: .init(red: 12/255, green: 12/255, blue: 13/255, alpha: 1), alpha: 0.1, x: 0, y: 4, blur: 8, spread: 0)
+        notiView.alpha = 0
+        
+        questionMarkButton.rx.tap
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self else { return }
+                UIView.animate(withDuration: 0.23, delay: 0,options: .curveEaseInOut, animations: {
+                    self.notiView.alpha = self.notiView.alpha == 1 ? 0 : 1
+                    self.questionMarkButton.transform = self.notiView.alpha == 0 ? .identity : CGAffineTransform(scaleX: 0.8, y: 0.8)
+                })
+            }).disposed(by: disposeBag)
+        
+        treeImageView.setTreeImage(mannerValue: post.mannerValue)
+//        progressMultiple.isActive = false
+        progressView.snp.makeConstraints { make in
+            make.width.equalTo(progressBackgroundView.snp.width).multipliedBy(CGFloat(post.mannerValue) / 10)
+        }
+        view.layoutIfNeeded()
+        
         
         
         
@@ -99,11 +140,21 @@ class PostDetailView: UIViewController {
                     .map([String:JSONData].self)
                     .asObservable()
             })
-            .subscribe(onNext: {[weak self] result in
-                guard let self else {return }
+            .flatMap({[weak self] result -> Observable<Room> in
+                guard let self else {return .empty()}
                 if case let .string(roomId) = result["roomId"] {
-                    print("성공", roomId)
+                    return chatProvider.rx.request(.getRoomTarget(userId: user.id, targetId: post.writerId))
+                        .map(Room.self)
+                        .asObservable()
+                        
                 }
+                else {
+                    return .empty()
+                }
+            })
+            .subscribe(onNext: {[weak self] room in
+                guard let self else {return }
+                MainNotification.default.onNext(.moveToRoom(room))
             }).disposed(by: disposeBag)
         
         let mapView = PostMapView()
@@ -118,7 +169,7 @@ class PostDetailView: UIViewController {
         
         self.titleLabel.text = post.title
         self.contentLabel.text = post.content
-        self.dateLabel.text = DateConverter.dateToString(string: post.createdAt)
+//        self.dateLabel.text = DateConverter.dateToString(string: post.createdAt)
         
         viewCountLabel.text = "\(post.viewCount)"
         likeLabel.text = "\(post.likes.count)"
@@ -156,7 +207,7 @@ class PostDetailView: UIViewController {
             
         }
         
-        if post.photos.isEmpty {
+        if post.photos.count <= 1 {
             pageControl.isHidden = true
         }
         pageControl.numberOfPages = post.photos.count
@@ -177,10 +228,6 @@ extension PostDetailView: UICollectionViewDelegate, UICollectionViewDataSource, 
         let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: AnnouncementImageCell.self)
         
         let images: [String] = post.photos
-       
-        
-        
-        
         let url = images[indexPath.row]
         cell.bindUI(imageName: url)
         cell.imageView.setImage(urlString: url, initialIndex: indexPath.item, imageURLs: images, completion: {[weak cell] image in
@@ -198,7 +245,6 @@ extension PostDetailView: UICollectionViewDelegate, UICollectionViewDataSource, 
             cell?.contentView.layoutIfNeeded()
         }, vc: self)
         cell.backgroundImageView.kf.setImage(with: URL(string: url)!, options: [.transition(.fade(0.25))])
-//        cell.cellSizeFix(count: images.count)
         return cell
     }
     
@@ -243,10 +289,46 @@ extension PostDetailView: UICollectionViewDelegate, UICollectionViewDataSource, 
     func getImageView(index: Int) -> UIImageView? {
         if let collectionView = collectionView {
             collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
-            if let cell = collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? AnnouncementImageCell{
+            if let cell = collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? AnnouncementImageCell {
                 return cell.imageView
             }
         }
         return nil
     }
+    
+    func formatRelativeDate(dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        formatter.locale = Locale(identifier: "ko_KR")
+        
+        guard let date = formatter.date(from: dateString) else {
+            return dateString
+        }
+        
+        let calendar = Calendar.current
+        let now = Date()
+        
+        // 날짜만 비교하기 위해 두 날짜의 시작 시간을 구합니다.
+        let startOfNow = calendar.startOfDay(for: now)
+        let startOfDate = calendar.startOfDay(for: date)
+        
+        // 두 날짜 사이의 일수 차이를 계산합니다.
+        let components = calendar.dateComponents([.day], from: startOfDate, to: startOfNow)
+        
+        if let dayDiff = components.day {
+            if dayDiff == 0 {
+                // 오늘인 경우 "오늘 HH:mm" 형식으로 출력
+                let timeFormatter = DateFormatter()
+                timeFormatter.dateFormat = "HH:mm"
+                return "오늘 " + timeFormatter.string(from: date)
+            } else if dayDiff >= 1 && dayDiff <= 5 {
+                // 1일 전부터 5일 전까지는 "n일전" 형식으로 출력
+                return "\(dayDiff)일전"
+            }
+        }
+        
+        // 5일보다 오래된 경우 원래 문자열 또는 다른 형식으로 반환하도록 수정 가능
+        return dateString
+    }
+
 }

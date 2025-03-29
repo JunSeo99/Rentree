@@ -80,4 +80,43 @@ extension UIViewController{
     @objc func handleTap2(_ sender: UITapGestureRecognizer? = nil) {
         self.view.endEditing(true)
     }
+    func showAlert(title : String,
+                   message: String? = nil,
+                   okTitle: String = "확인",
+                   cancelTitle: String = "취소",
+                   onlyOk: Bool = false) -> Observable<AlertActionType> {
+        
+        return Observable.create { [weak self] observer in
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: okTitle, style: .default) { _ in
+                // event 전달
+                observer.onNext(.ok)
+                observer.onCompleted()
+            }
+            if !onlyOk {
+                let cancel = UIAlertAction(title: cancelTitle, style: .default) { _ in
+                    // event 전달
+                    observer.onNext(.cancel)
+                    observer.onCompleted()
+                }
+                alertController.addAction(okAction)
+                alertController.addAction(cancel)
+            }
+            else{
+                alertController.addAction(okAction)
+            }
+            
+            
+            
+            self?.present(alertController, animated: true, completion: nil)
+            
+            return Disposables.create {
+                alertController.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+}
+enum AlertActionType {
+    case ok
+    case cancel
 }

@@ -15,9 +15,20 @@ import PhotosUI
 import Kingfisher
 
 class ProfileView: UIViewController {
+    
+    @IBOutlet weak var progressMultiple: NSLayoutConstraint!
+    @IBOutlet weak var questionMarkButton: UIButton!
+    @IBOutlet weak var notiView: UIView!
+    @IBOutlet weak var treeImageView: UIImageView!
     @IBOutlet weak var progressBackground: UIView!
     @IBOutlet weak var progressView: UIView!
     
+    @IBOutlet weak var valueWrapView: UIView!
+    
+    @IBOutlet weak var valueLabel: UILabel!
+    
+    @IBOutlet weak var wonWrapView: UIView!
+    @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var imageWidth: NSLayoutConstraint!
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var blurEffectView: UIVisualEffectView!
@@ -29,6 +40,7 @@ class ProfileView: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var setUnivButton: UIButton!
     
+//    @IBOutlet weak var imageWidth: NSLayoutConstraint!
     var navigationView: ProfileNavigationView?
     let provider: MoyaProvider<API> = .init()
     var disposeBag: DisposeBag = DisposeBag()
@@ -36,13 +48,45 @@ class ProfileView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        notiView.layer.cornerRadius = 12
+        notiView.layer.borderWidth = 1
+        notiView.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).cgColor
+        notiView.layer.applySketchShadow(color: .init(red: 12/255, green: 12/255, blue: 13/255, alpha: 1), alpha: 0.1, x: 0, y: 4, blur: 8, spread: 0)
+        notiView.alpha = 0
+        
+        questionMarkButton.rx.tap
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self else { return }
+                UIView.animate(withDuration: 0.23, delay: 0,options: .curveEaseInOut, animations: {
+                    self.notiView.alpha = self.notiView.alpha == 1 ? 0 : 1
+                    self.questionMarkButton.transform = self.notiView.alpha == 0 ? .identity : CGAffineTransform(scaleX: 0.8, y: 0.8)
+                })
+            }).disposed(by: disposeBag)
+        
+        treeImageView.setTreeImage(mannerValue: user.mannerValue)
+//        progressMultiple.multiplier = CGFloat(user.mannerValue) / 10
+        progressMultiple.isActive = false
+        progressView.snp.makeConstraints { make in
+            make.width.equalTo(progressBackground.snp.width).multipliedBy(CGFloat(user.mannerValue) / 10)
+        }
+        progressBackground.layoutIfNeeded()
+        
+        valueWrapView.layer.cornerRadius = 12
+        wonWrapView.layer.cornerRadius = 6
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        
+        valueLabel.text = "\(formatter.string(from: NSNumber(value: user.monthTransactionValue)) ?? "45,000")원"
+        
+        
+        
         progressView.layer.cornerRadius = 13
         progressBackground.layer.cornerRadius = 13
         scrollView.alwaysBounceVertical = true
         navigationController?.navigationController?.setNavigationBarHidden(true, animated: true)
         
         navigationController?.setNavigationBarHidden(true, animated: true)
-        
         
         nicknameLabel.superview?.superview?.layer.cornerRadius = 18
         nicknameLabel.superview?.superview?.layer.borderWidth = 1
@@ -55,6 +99,8 @@ class ProfileView: UIViewController {
 //        myItemButton.layer.cornerRadius = 18
 //        myItemButton.layer.borderWidth = 1
 //        myItemButton.layer.borderColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1).cgColor
+        
+        
         
         
         scrollView.contentInsetAdjustmentBehavior = .never
@@ -90,6 +136,24 @@ class ProfileView: UIViewController {
         if let profileImage = user.profileImage, let url = URL(string: profileImage) {
             self.profileImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
             self.backgroundImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
+            self.backgroundImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))]) {[weak self] result in
+                guard let self else { return }
+                switch result{
+                case .success(let data):
+                    let imageSize = data.image.size
+                    let imageRatio = imageSize.height/imageSize.width
+                    if CGFloat(260)/UIScreen.main.bounds.width > imageRatio {
+                        self.imageWidth.constant = UIScreen.main.bounds.width
+                        self.profileImageView.contentMode = .scaleAspectFit
+                    }
+                    else{
+                        self.imageWidth.constant = (1/imageRatio) * 260.0
+                        self.profileImageView.contentMode = .scaleAspectFill
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
         }
         
         
@@ -153,7 +217,6 @@ class ProfileView: UIViewController {
                 if let url = URL(string: url) {
                     self.profileImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
                 }
-                
             }).disposed(by: disposeBag)
     }
     

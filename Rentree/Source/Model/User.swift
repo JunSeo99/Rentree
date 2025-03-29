@@ -15,9 +15,15 @@ struct User: Codable {
     var geoInfo: GeoJsonPoint
     var mannerValue: Int
     var profileImage: String?
+    var monthTransactionValue: Int
+    var monthTransactionCount: Int
 }
 
 
-var user = User(id: "67e40cde413f36b08590b2bc", name: "호엥엥ㅇ에에엥", schoolCode: "단국대학교", age: 25, geoInfo: .init(type: "Point", coordinates: [
+//var user = User(id: "6600a1234bcf123456789099", name: "강하늘", schoolCode: "단국대학교", age: 25, geoInfo: .init(type: "Point", coordinates: [
+//    32.12314, 132.1304
+//]), mannerValue: 3, monthValue: 20000, monthCount: 2)
+
+var user = User(id: "6600a1234bcf123456789100", name: "송준서", schoolCode: "단국대학교", age: 25, geoInfo: .init(type: "Point", coordinates: [
     32.12314, 132.1304
-]), mannerValue: 10)
+]), mannerValue: 2, monthTransactionValue: 45000, monthTransactionCount: 3)

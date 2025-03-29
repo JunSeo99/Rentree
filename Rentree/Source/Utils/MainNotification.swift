@@ -12,6 +12,8 @@ class MainNotification {
 //    static var state = ReplaySubject<StateChange?>.create(bufferSize: 1)
     enum MoveAction {
         case moveToRoom(Room)
+        case moveToPost(Post)
+        case refresh
 //        case managerToRoomNotificationWithId(id: String)
 //        case managerToApplicant(userId: String,announcementId: String)
 //        case managerToPropose(userId: String,announcementId: String)

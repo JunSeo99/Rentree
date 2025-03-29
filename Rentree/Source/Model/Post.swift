@@ -26,6 +26,8 @@ struct Post: Codable, Equatable {
     var rentalType: String // ex)
     var itemType: String // 테블릿 or 전동 드라이버
     var viewCount: Int
+    var mannerValue: Int
+    var profileImage: String
     
     static func sampleData() -> [Post] {
         return [
@@ -50,7 +52,7 @@ struct BorrowerInfo: Codable, Equatable {
     var name: String?
     var profileImage: String?
     var mannerValue: Int?
-    var returnImage: String?
+    var returnImage: [String]?
     var schoolCode: String?
 }
 

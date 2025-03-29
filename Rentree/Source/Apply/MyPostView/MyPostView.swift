@@ -23,7 +23,10 @@ class MyPostView: UIViewController, StoryboardView {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         tableView.register(cellType: MyPostCell.self)
+        tableView.register(cellType: MyPostUserCell.self)
         if reactor?.currentState.posts.isEmpty == true {
             reactor?.action.onNext(.refresh)
         }
@@ -69,6 +72,14 @@ class MyPostView: UIViewController, StoryboardView {
                 case .post(let post):
                     let cell = tableView.dequeueReusableCell(for: indexPath, cellType: MyPostCell.self)
                     cell.bindUI(post: post)
+                    
+                    if reactor.currentState.opendSectionIds.contains(where: {$0 == post.id}) {
+                        cell.arrowImageView.transform = .identity
+                    }
+                    else {
+                        cell.arrowImageView.transform = .init(rotationAngle: .pi)
+                    }
+                    
                     cell.seperatorView.isHidden = indexPath.section == 0
                     //                cell.mainStackViewTop.constant = indexPath.section == 0 ? 16 : 29
                     //                cell.bottomBarView.isHidden =
@@ -77,11 +88,16 @@ class MyPostView: UIViewController, StoryboardView {
                         .map({Reactor.Action.movePostView(post)})
                         .bind(to: reactor.action)
                         .disposed(by: cell.disposeBag)
+                    
+                    cell.openClicked
+                        .map({Reactor.Action.openSection(id: post.id)})
+                        .bind(to: reactor.action)
+                        .disposed(by: cell.disposeBag)
                     return cell
-                case .user(let user2):
+                case .user(let post, let user2):
                     let cell = tableView.dequeueReusableCell(for: indexPath, cellType: MyPostUserCell.self)
-                    var post = reactor.currentState.posts[indexPath.section]
-                    let userId = user2.userId
+//                    let post = reactor.currentState.posts[indexPath.section]
+                    
                     cell.bindUI(borrower: user2, indexText: "(\(indexPath.row )/\(post.borrowerInfo.count))")
                     
                     cell.goToChat
@@ -151,7 +167,7 @@ class MyPostView: UIViewController, StoryboardView {
                 if ids.contains(post.id) {
                     return AnnouncementSectionModel(model: post.id,
                                                     items: [AnnouncementSectionModel.Item.post(post)] + post.borrowerInfo.map({ borrower in
-                        return AnnouncementSectionModel.Item.user(borrower)
+                        return AnnouncementSectionModel.Item.user(post, borrower)
                     }))
                 }
                 else{
@@ -277,6 +293,9 @@ class MyPostReactor: Reactor {
                 provider.rx.request(API.getMyPost(userId: user.id))
                     .map([Post].self)
                     .asObservable()
+                    .do(onError: {
+                        print("error: ", $0)
+                    })
                     .flatMap({[weak self] datas -> Observable<Mutation> in
                         guard let self else {return .empty() }
                         var isEmpty = datas.isEmpty
@@ -300,6 +319,9 @@ class MyPostReactor: Reactor {
             ])
             
         case .movePostView(post: let post):
+            if let post {
+                MainNotification.default.onNext(.moveToPost(post))                
+            }
             return .concat([
                 .just(.setPostView(post)),
                 .just(.setPostView(nil))
@@ -366,10 +388,10 @@ enum MyPostItem: Equatable, IdentifiableType {
         switch self {
         case .post(let post):
             return post.id
-        case .user(let user):
-            return user.userId
+        case .user(let post, let user):
+            return post.id + user.userId
         }
     }
     case post(Post)
-    case user(BorrowerInfo)
+    case user(Post, BorrowerInfo)
 }

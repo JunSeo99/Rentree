@@ -15,6 +15,7 @@ import PhotosUI
 import SpriteKit
 //import FirebaseAnalytics
 import SnapKit
+import Moya
 
 enum RoomInformationAction{
     case block(String)
@@ -25,6 +26,25 @@ enum RoomInformationAction{
 class ChatView: UIViewController,
                 StoryboardView,
                 UITableViewDelegate {
+    @IBOutlet weak var postWrapView: UIView!
+    
+    @IBOutlet weak var contentImageView: UIImageView!
+    @IBOutlet weak var contentLabel: UITextView!
+    @IBOutlet weak var titleLabel: UILabel!
+//    @IBOutlet weak var tagLabel: UILabel!
+    @IBOutlet weak var priceView: UIView!
+    
+    @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var longPeriodLabel: UILabel!
+    @IBOutlet weak var longPeriodView: UIView!
+    
+    @IBOutlet weak var rentalButton: UIButton!
+    
+    
+    
+    
+    
+    
     struct CellSizeCache: Equatable {
         var isFirst: Bool
         var isRemoved: Bool
@@ -106,8 +126,9 @@ class ChatView: UIViewController,
     typealias Reactor = ChatReactor
     
     typealias Model = SectionModel<Int, ChatType>
+    var postSelectedDisposeBag = DisposeBag()
     @IBOutlet weak var tableView: UITableView!
-    
+    var postProvider = MoyaProvider<API>()
     var disposeBag: DisposeBag = DisposeBag()
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -181,7 +202,88 @@ class ChatView: UIViewController,
         }
     }
     
-    
+    func bindPost(post: Post, buttonHidden: Bool) {
+       
+        rentalButton.layer.borderWidth = 1
+        rentalButton.layer.cornerRadius = 12
+        rentalButton.layer.borderColor = UIColor(resource: .jiuBlue).cgColor
+        let alreadyBorrowed = !post.borrowerInfo.filter({$0.state == 1}).isEmpty
+        
+        if post.writerId == user.id || buttonHidden ||  alreadyBorrowed{
+            rentalButton.isHidden = true
+        }
+        else {
+            postSelectedDisposeBag = DisposeBag()
+            rentalButton.isHidden = false
+            rentalButton.rx.tap
+                .flatMap({ [weak self] _ -> Observable<Void> in
+                    guard let self else { return .empty()}
+                    return self.showAlert(title: "", message: "물건을 받으셨나요?", okTitle: "확인", cancelTitle: "취소", onlyOk: false)
+                        .filter({$0 == .ok})
+                        .map({ _ in return Void() })
+                })
+                .flatMap({ [weak self] _ -> Observable<Void> in
+                guard let self else { return .empty()}
+                    
+                    return self.postProvider.rx
+                        .request(.allowBorrowing(postId: post.id, userId: user.id))
+                        .map({ _ in
+                            return Void()
+                        })
+                        .asObservable()
+                        .catch({ e in
+                            print("error: ", e)
+                            return .empty()
+                        })
+                })
+                .subscribe(onNext: {[weak self] _ in
+                    guard let self else { return }
+                    MainNotification.default.onNext(.refresh)
+                    self.rentalButton.isHidden = true
+                }).disposed(by: postSelectedDisposeBag)
+        }
+        
+        
+        contentImageView.layer.cornerRadius = 6
+        contentLabel.textContainerInset = .zero
+        contentLabel.textContainer.lineFragmentPadding = 0
+        contentLabel.textContainer.lineBreakMode = .byTruncatingTail
+        
+        
+        longPeriodView.layer.cornerRadius = 5
+        priceView.layer.cornerRadius = 5
+        contentLabel.textContainer.maximumNumberOfLines = 3
+        
+        postWrapView.layer.cornerRadius = 12
+        postWrapView.layer.applySketchShadow(color: .black, alpha: 0.16, x: 0, y: 3, blur: 6, spread: 0)
+        postWrapView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { tap in
+                MainNotification.default.onNext(.moveToPost(post))
+            }).disposed(by: disposeBag)
+        
+        self.titleLabel.text = post.title
+        self.contentLabel.text = post.content
+        if let image = post.photos.first,
+           let imageURL = URL(string: image){
+            contentImageView.kf.setImage(with: imageURL, options: [.transition(.fade(0.25))])
+        }
+        else {
+            contentImageView.isHidden = true
+        }
+        
+        if post.rentalType == "무료" {
+            priceLabel.text = "무료 대여"
+            longPeriodLabel.text = post.priceByPeriod
+        }
+        else {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            
+            priceLabel.text = "\(formatter.string(from: NSNumber(value: post.price)) ?? "\(post.price)")원/\(post.priceByPeriod)"
+            longPeriodLabel.text = post.rentalType
+        }
+    }
     func bind(reactor: ChatReactor) {
         
         reactor.action.onNext(.refresh(lastest: false))
@@ -739,8 +841,8 @@ class ChatView: UIViewController,
                     make.trailing.equalToSuperview()
                 }
                 
-                self.navigationItem.leftItemsSupplementBackButton = true
-                self.navigationItem.setLeftBarButton(.init(customView: titleView), animated: true)
+//                self.navigationItem.leftItemsSupplementBackButton = true
+//                self.navigationItem.setLeftBarButton(.init(customView: titleView), animated: true)
                 sideBarButton.snp.makeConstraints { make in
                     make.edges.equalToSuperview()
                 }
@@ -812,7 +914,27 @@ class ChatView: UIViewController,
             make.width.equalTo(35)
             make.height.equalTo(35)
         }
-       
+        if let roomItem = reactor?.initialState.room as? Room{
+            
+            if let jsonData = roomItem.postInformation.data(using: .utf8) {
+                do {
+                    let post = try JSONDecoder().decode(Post.self, from: jsonData)
+                    self.bindPost(post: post, buttonHidden: true)
+                    
+                    postProvider.rx.request(.getPost(postId: post.id))
+                        .observe(on: MainScheduler.asyncInstance)
+                        .map(Post.self)
+                        .subscribe(onSuccess: {[weak self] post in
+                            self?.bindPost(post: post, buttonHidden: false)
+                        }).disposed(by: disposeBag)
+                    
+                } catch {
+                    print("JSON 디코딩 실패: \(error)")
+                }
+            }
+            
+            
+        }
         if let roomItem = reactor?.initialState.room as? RoomListItem{
             let titleView = UIView()
             let imageView = UIImageView()
@@ -855,8 +977,8 @@ class ChatView: UIViewController,
                 }
             }
 
-            self.navigationItem.leftItemsSupplementBackButton = true
-            self.navigationItem.setLeftBarButton(.init(customView: titleView), animated: true)
+//            self.navigationItem.leftItemsSupplementBackButton = true
+//            self.navigationItem.setLeftBarButton(.init(customView: titleView), animated: true)
             sideBarButton.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
@@ -866,7 +988,7 @@ class ChatView: UIViewController,
         barButton.setBackButtonTitlePositionAdjustment(.init(horizontal: -16, vertical: 0), for: .default)
 //        barButton.setBackgroundVerticalPositionAdjustment(-16, for: .default)
 //        barButton.backgroundVerticalPositionAdjustment(for: .compact)
-        self.navigationItem.setRightBarButton(barButton, animated: true)
+//        self.navigationItem.setRightBarButton(barButton, animated: true)
         
 //        self.navigationItem.setLeftBarButtonItems([self.navigationItem.backBarButtonItem!, .init(customView: titleView)], animated: true)
         inputView2.snp.makeConstraints { make in

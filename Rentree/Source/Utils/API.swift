@@ -17,9 +17,11 @@ enum API{
     case allowBorrowing(postId: String, userId: String)
     case getMyPost(userId: String)
     case getBorrowedPost(userId: String)
-        
+    case login(userId: String)
     
     case returnBack(postId: String, borrowerId: String, image: Data)
+    case showPost(String)
+    case getPost(postId: String)
 }
 extension API:TargetType{
     var headers: [String : String]? {
@@ -28,7 +30,7 @@ extension API:TargetType{
     
     var baseURL: URL {
 //        return URL(string: "http://localhost:8080")!
-        return URL(string: "http://ec2-13-124-253-46.ap-northeast-2.compute.amazonaws.com:8080")!
+        return URL(string: "http://ec2-52-79-229-101.ap-northeast-2.compute.amazonaws.com:8080")!
     }
     
     var path: String {
@@ -53,6 +55,12 @@ extension API:TargetType{
             return "/post/borrow"
         case .returnBack:
             return "/post/return"
+        case .login:
+            return "/user/login"
+        case .showPost:
+            return "/user/show"
+        case .getPost:
+            return "/post"
         }
     }
     
@@ -78,6 +86,12 @@ extension API:TargetType{
             return .get
         case .returnBack:
             return .post
+        case .login:
+            return .get
+        case .showPost(_):
+            return .get
+        case .getPost(postId: let postId):
+            return .get
         }
     }
     
@@ -115,6 +129,13 @@ extension API:TargetType{
             multipartFormDatas.append(.init(provider: .data(image), name: "returnImage",fileName: "\(borrowerId)\(Date.timeIntervalSinceReferenceDate).jpeg" ,mimeType: "image/jpeg"))
             return .uploadMultipart(multipartFormDatas)
 //            return .requestParameters(parameters: ["userId": userId, "borrowerId": borrowerId], encoding: URLEncoding.queryString)
+            
+        case .login(userId: let userId):
+            return .requestParameters(parameters: ["userId": userId], encoding: URLEncoding.queryString)
+        case .showPost(let postId):
+            return .requestParameters(parameters: ["postId": postId], encoding: URLEncoding.queryString)
+        case .getPost(postId: let postId):
+            return .requestParameters(parameters: ["postId": postId], encoding: URLEncoding.queryString)
         }
     }
 }

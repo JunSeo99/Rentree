@@ -70,9 +70,16 @@ class ApplyTabman: TabmanViewController,
         
         
         self.navigationItem.title = "물품 관리"
+        let vc1 = MyPostView(nibName: "MyPostView", bundle: nil)
+        let reactor1 = MyPostReactor()
+        vc1.reactor = reactor1
         
-        viewControllers.append(UIViewController())
-        viewControllers.append(UIViewController())
+        let vc2 = BorrowedView(nibName: "BorrowedView", bundle: nil)
+//        let reactor1 = MyPostReactor()
+//        vc2.reactor = reactor1
+        
+        viewControllers.append(vc1)
+        viewControllers.append(vc2)
         
         let bar = TMBar.ButtonBar()
 //        let badgeView1 = BadgeDotView()

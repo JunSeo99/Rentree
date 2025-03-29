@@ -7,7 +7,10 @@
 
 import Moya
 
-let chatBaseURL = "http://localhost:8080"
+
+let chatBase = "ec2-3-36-4-254.ap-northeast-2.compute.amazonaws.com"
+//let chatBase = "ec2-3-36-4-254.ap-northeast-2.compute.amazonaws.com"
+let chatBaseURL = "http://\(chatBase):8080"
 
 enum ChatAPI{
     case getRoomListItem(userId: String,roomId: String)

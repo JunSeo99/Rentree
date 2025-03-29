@@ -60,7 +60,7 @@ class PostListViewCell: UITableViewCell, NibReusable {
             contentImageView.isHidden = true
         }
         
-        viewCountLabel.text = "\(Int.random(in: 1...10))"
+        viewCountLabel.text = "\(post.viewCount)"
         likeLabel.text = "\(post.likes.count)"
         
         sharedLabel.text = "\(post.borrowerInfo.count)"
