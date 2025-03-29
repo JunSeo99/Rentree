@@ -21,7 +21,7 @@ class ChatReactor: Reactor {
         var animated: Bool
         var shake: Bool
     }
-    var userId: String
+//    var userId: String
     let dateConverter = ChatDateConverter()
     var initialState: State
     let socketManager: SocketManager
@@ -30,7 +30,7 @@ class ChatReactor: Reactor {
     let jsonDecoder = JSONDecoder()
     init(socketManager: SocketManager,provider: MoyaProvider<ChatAPI>,room: any RoomType, userId: String) {
         self.initialState = .init(roomId: room.id,room: room)
-        self.userId = user.id
+//        self.userId = user.id
         self.socketManager = socketManager
         self.provider = provider
     }
@@ -215,6 +215,7 @@ class ChatReactor: Reactor {
             else{
                 
                 if let data = textToSender(str, uid: uid, mentionChat: mention) {
+                    print(String(data: data, encoding: .utf8)!)
                     socketManager.socket.write(string: String(data: data, encoding: .utf8)!)
                 }
                 var loadingMessage = makeLoadingItem(str, uid: uid)
@@ -379,7 +380,7 @@ class ChatReactor: Reactor {
                             guard let messageIndex = newMessages.firstIndex(where: {$0.identity == removed.removedId}),
                                   var message = newMessages[messageIndex].getChat() else { return }
                             message.removed = true
-                            if message.userId == self.userId {
+                            if message.userId == user.id {
                                 newMessages[messageIndex] = .sent(message)
                             }
                             else{
@@ -396,7 +397,7 @@ class ChatReactor: Reactor {
                                 return
                             }
                             uidSets.insert(chat.uid)
-                            if chat.userId == self.userId{
+                            if chat.userId == user.id{
                                 newLoadingMessages.removeAll(where: {$0.uid == chat.uid})
                                 if case .sent = newMessages.first{
                                     chat.isFirst = false
@@ -704,7 +705,7 @@ class ChatReactor: Reactor {
         case .imageAdded(let data):
             let image = UIImage(data: data)!
             let uid = UUID().uuidString
-            let loadingChat = Chat(id: "\(Date().timeIntervalSince1970)", userId: userId, name: user.name, createdAt: DateConverter.dateToString(date: Date()), content: "(사진)", type: "image", roomId: currentState.roomId, image: .init(url: "", height: image.size.height, width: image.size.width,data: data), unreadCount: 0, uid: uid, profileImage: user.profileImage ?? "", block: nil)
+            let loadingChat = Chat(id: "\(Date().timeIntervalSince1970)", userId: user.id, name: user.name, createdAt: DateConverter.dateToString(date: Date()), content: "(사진)", type: "image", roomId: currentState.roomId, image: .init(url: "", height: image.size.height, width: image.size.width,data: data), unreadCount: 0, uid: uid, profileImage: user.profileImage ?? "", block: nil)
             if currentState.isRecentPagingAble{
                 return getLastestMessages().flatMap {[weak self] messages -> Observable<Mutation> in
                     guard let self else {return .empty()}
@@ -833,7 +834,7 @@ class ChatReactor: Reactor {
                     return .just(.setMessages(messages))
                 })
         case .forceWithdrawal(targetId: let targetId):
-            return  provider.rx.request(.forcingToWithdrawal(userId: userId,targetId: targetId, roomId: currentState.roomId))
+            return  provider.rx.request(.forcingToWithdrawal(userId: user.id,targetId: targetId, roomId: currentState.roomId))
                 .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
                 .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
                 .asObservable()
@@ -859,7 +860,8 @@ class ChatReactor: Reactor {
         var mention: Chat.Mention?
     }
     func textToSender(_ str: String,uid: String, mentionChat: Chat.Mention?) -> Data?{
-        var chat = MessageSender(userId: userId, roomId: currentState.roomId, content: str, uid: uid, type: "chat")
+        print(user.id)
+        var chat = MessageSender(userId: user.id, roomId: currentState.roomId, content: str, uid: uid, type: "chat")
         if let mentionChat {
             chat.mention = mentionChat
         }
@@ -877,7 +879,7 @@ class ChatReactor: Reactor {
         if case .sent = messages.first{
             isFirst = false
         }
-        let loadingChat = Chat(isFirst: isFirst, id: "\(refrenceDate)", userId: userId, name: user.name, createdAt: date, content: str, type: "chat", roomId: currentState.roomId, image: nil, unreadCount: 0, uid: uid, profileImage: user.profileImage, block: nil)
+        let loadingChat = Chat(isFirst: isFirst, id: "\(refrenceDate)", userId: user.id, name: user.name, createdAt: date, content: str, type: "chat", roomId: currentState.roomId, image: nil, unreadCount: 0, uid: uid, profileImage: user.profileImage, block: nil)
         return loadingChat
     }
     func mappingModel(_ messages: [Chat]) -> [ChatType]{
@@ -922,7 +924,7 @@ class ChatReactor: Reactor {
                 }
                 return chatTypes
             }
-            if message.userId == userId {
+            if message.userId == user.id {
                 if index == messages.count - 1 || messages[index + 1].type != "chat" || messages[index + 1].userId != message.userId || isOtherDay{
                     newMessage.isFirst = true
                 }
@@ -952,14 +954,14 @@ class ChatReactor: Reactor {
         }
     }
     func getMassages() -> Observable<ChatSeperated>{
-        provider.rx.request(.getMessageList(userId: userId, roomId: currentState.roomId))
+        provider.rx.request(.getMessageList(userId: user.id, roomId: currentState.roomId))
             .map(ChatSeperated.self)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .asObservable()
     }
     func getMessages(with messageId: String) -> Observable<ChatSeperated>{
-        provider.rx.request(.getMiddleMessage(userId: userId, roomId: currentState.roomId, messageId: messageId))
+        provider.rx.request(.getMiddleMessage(userId: user.id, roomId: currentState.roomId, messageId: messageId))
             .map(ChatSeperated.self)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
@@ -973,7 +975,7 @@ class ChatReactor: Reactor {
 //            .asObservable()
 //    }
     func getOldMessages(oldId: String) -> Observable<[Chat]> {
-        provider.rx.request(.getOldMessages(userId: userId, roomId: currentState.roomId, oldId: oldId))
+        provider.rx.request(.getOldMessages(userId: user.id, roomId: currentState.roomId, oldId: oldId))
             .map([Chat].self)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
@@ -982,7 +984,7 @@ class ChatReactor: Reactor {
     }
     
     func getRecentMessages(recentId: String) -> Observable<[Chat]> {
-        provider.rx.request(.getRecentMessages(userId: userId, roomId: currentState.roomId, recentId: recentId))
+        provider.rx.request(.getRecentMessages(userId: user.id, roomId: currentState.roomId, recentId: recentId))
             .map([Chat].self)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
@@ -990,7 +992,7 @@ class ChatReactor: Reactor {
 //            .debug()
     }
     func getLastestMessages() -> Observable<[Chat]>{
-        provider.rx.request(.getLastestMessageList(userId: userId,roomId: currentState.roomId))
+        provider.rx.request(.getLastestMessageList(userId: user.id,roomId: currentState.roomId))
             .map([Chat].self)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
@@ -998,7 +1000,7 @@ class ChatReactor: Reactor {
     }
     
     func changeNotificationStatus(isOn: Bool) -> Observable<Void> {
-        provider.rx.request(.notificationStatus(userId: userId, roomId: currentState.roomId, isOn: isOn))
+        provider.rx.request(.notificationStatus(userId: user.id, roomId: currentState.roomId, isOn: isOn))
             .map({_ in Void()})
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
@@ -1006,21 +1008,21 @@ class ChatReactor: Reactor {
     }
    
     func withdrawal() -> Observable<Void> {
-        provider.rx.request(.withdrawal(userId: userId, roomId: currentState.roomId))
+        provider.rx.request(.withdrawal(userId: user.id, roomId: currentState.roomId))
             .map({_ in Void()})
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .asObservable()
     }
     func uploadImage(data:Data,imageHeight:CGFloat,imageWidth: CGFloat,uid:String) -> Observable<Chat> {
-        provider.rx.request(.sendImage(roomId: currentState.roomId, userId: userId, imageHeight: imageHeight, imageWidth: imageWidth, imageData: data, uid: uid))
+        provider.rx.request(.sendImage(roomId: currentState.roomId, userId: user.id, imageHeight: imageHeight, imageWidth: imageWidth, imageData: data, uid: uid))
             .map(Chat.self)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .asObservable()
     }
     func uploadMessages(loadingChat:[Chat]) -> Observable<[Chat]> {
-        provider.rx.request(.sendMessages(roomId: currentState.roomId, userId: userId, contents: loadingChat.map({
+        provider.rx.request(.sendMessages(roomId: currentState.roomId, userId: user.id, contents: loadingChat.map({
             return .init(content: $0.content, uid: $0.uid)
         })))
         .map([Chat].self)
@@ -1029,7 +1031,7 @@ class ChatReactor: Reactor {
         .asObservable()
     }
     func getRecentMessage() -> Observable<Chat> {
-        provider.rx.request(.getRecentMessage(userId: userId, roomId: currentState.roomId))
+        provider.rx.request(.getRecentMessage(userId: user.id, roomId: currentState.roomId))
             .map(Chat.self)
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
@@ -1048,7 +1050,7 @@ class ChatReactor: Reactor {
 //    }
     
     func blockUser(targetId:String) -> Observable<Void> {
-        provider.rx.request(.blockUser(roomId: currentState.roomId, userId: userId, targetId: targetId))
+        provider.rx.request(.blockUser(roomId: currentState.roomId, userId: user.id, targetId: targetId))
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .observe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))
             .asObservable()
@@ -1056,7 +1058,7 @@ class ChatReactor: Reactor {
             .map({_ in Void()})
     }
     func unblockUser(targetId:String) -> Observable<Void> {
-        provider.rx.request(.unblockUser(roomId: currentState.roomId, userId: userId, targetId: targetId))
+        provider.rx.request(.unblockUser(roomId: currentState.roomId, userId: user.id, targetId: targetId))
 //            .map([Chat].self)
             .debug("<차단 해제>")
             .subscribe(on: ConcurrentDispatchQueueScheduler.init(qos: .default))

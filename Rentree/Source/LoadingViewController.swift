@@ -17,7 +17,7 @@ class LoadingViewController : UIViewController{
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let navigation = storyboard.instantiateViewController(identifier: "MainNavigationViewController")
         
-        provider.rx.request(.login(userId: "6600a1234bcf123456789100"))
+        provider.rx.request(.login(userId: "67e2ddfd89aa2d7acbbd5f84"))
             .observe(on: MainScheduler.asyncInstance)
             .map(User.self)
             .subscribe(onSuccess: { newUser in

@@ -10,11 +10,11 @@ import RxSwift
 import RxCocoa
 var isOpenModal: Bool = false
 class MainTabBarController: UITabBarController {
-    let socketManager = SocketManager()
+    var socketManager: SocketManager?
     var disposeBag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        socketManager = SocketManager()
         
         
         
@@ -46,7 +46,7 @@ class MainTabBarController: UITabBarController {
         
         let chatView = RoomListView(nibName: "RoomListView", bundle: nil)
         let chatProvider = MoyaProvider<ChatAPI>()
-        chatView.reactor = .init(chatProvider: chatProvider, socketManager: socketManager)
+        chatView.reactor = .init(chatProvider: chatProvider, socketManager: socketManager!)
         
         
         let navi2 = MainNavigationViewController(rootViewController: chatView)

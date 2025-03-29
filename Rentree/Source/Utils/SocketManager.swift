@@ -62,7 +62,7 @@ class SocketManager: WebSocketDelegate{
     var userId = user.id
     init() {
         
-        let url = URL(string: socketURL + "/\(userId)")!
+        let url = URL(string: socketURL + "/\(user.id)")!
         let request = URLRequest(url: url)
         let pinner = FoundationSecurity(allowSelfSigned: true)
         socket = WebSocket(request: request,certPinner: pinner)
